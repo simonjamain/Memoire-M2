@@ -1,0 +1,123 @@
+\ProvidesPackage{simonj}
+%-------------------- DEBUT Variables --------------------------
+\def\hauteurMoy{30mm}
+%-------------------- FIN   Variables---------------------------
+%-------------------- DEBUT Packages ---------------------------
+\usepackage[french]{babel}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage{datetime}
+\usepackage{tabu}
+\usepackage{amsmath}
+\usepackage[export]{adjustbox}
+\graphicspath{{images/}}
+\usepackage{wrapfig}
+\usepackage{algorithmic}
+\usepackage[utf8]{inputenc}
+\usepackage{subcaption}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[scaled]{helvet}
+\usepackage[T1]{fontenc}
+\usepackage{verbatim}
+\usetikzlibrary{calc}
+\usepackage{relsize}
+\usepackage{hyperref}
+
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+
+\usepackage[acronym]{glossaries}
+\makeglossaries
+
+%-------------------- FIN   Packages ---------------------------
+% mise en page
+\setlength{\parskip}{1em}
+%-------------------- DEBUT Notations --------------------------
+\include{notations}
+%-------------------- FIN   Notations --------------------------
+
+
+\newenvironment{topics}{
+\newcommand{\topic}[2]{ \item{##1 / ##2} }
+Topics:
+\begin{itemize}
+}
+{
+\end{itemize}
+}
+
+
+
+%-------------------- DEBUT  Commandes -------------------------
+% illustrations
+%\makeatletter
+%\def\maxwidth#1{\ifdim\Gin@nat@width>#1 #1\else\Gin@nat@width\fi}
+%\makeatother
+
+\newcommand{\illustration}[1]%
+{\includegraphics{#1}}
+\newcommand{\illustrationDim}[2]%
+{\includegraphics[#2]{#1}}
+\newcommand{\illustrationKeepDim}[1]%
+{\includegraphics[max width =\textwidth ]{#1}}
+
+\newcommand{\figureRef}[1]{(cf. figure \ref{#1})}
+
+% we use the file name for the label as well
+\newcommand{\schema}[2]%
+{%
+\begin{figure}[h]%
+    \centering%
+    \illustrationKeepDim{#1}%
+    \caption{#2 \label{#1}}%
+\end{figure}%
+}
+
+\newcommand{\tikzSchema}[3]%
+{%
+\begin{figure}[h]%
+    \centering%
+    #1%
+    \caption{#3 \label{#2}}%
+\end{figure}%
+}
+
+% scénarios
+\newenvironment{scenario}[3]%
+{%
+    %------ commande interne
+    \newcommand{\solution}[3]%
+    {
+        \item ##1
+        
+        \begin{center}
+            \illustrationDim{##2}{height = \hauteurMoy}
+        \end{center}
+        \emph{OBSERVATIONS: ##3}
+    }
+    %-----------------------
+
+    \subsubsection{Scénario #1}
+    \emph{Objectif :} #2
+    
+    \emph{Situation initiale :}
+    \begin{center}
+        \illustrationDim{#3}{height = \hauteurMoy}
+    \end{center}
+    
+    \begin{itemize}
+}{%
+    \end{itemize}
+}
+
+\newenvironment{citeauteur}[1][1]{%
+	\def\citeauteurarg{#1}\par\smallskip\leftskip.1\linewidth\rightskip.1\linewidth<<\kern0.16em\relax\itshape\nobreak\ignorespaces
+	}{\unskip\nobreak\kern0.16em>>\quad\unless\ifx\empty\citeauteur\normalfont(\citeauteurarg)\fi\par\smallskip}
+
+
+%-------------------- FIN    Commandes -------------------------

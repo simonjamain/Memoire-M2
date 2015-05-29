@@ -1,0 +1,127 @@
+
+
+Définissons maintenant les rôles attendus pour le CSP solver :
+\begin{enumerate}
+    \item Assurer la faisabilité du scénario ;
+    \item Prédire les comportement à l'exécution :
+    \begin{enumerate}
+        \item Indiquer la propagation des contraintes (cf. figure \ref{figPropagation}) ;
+        \item Détecter les dépendances de souplesse (cf. figure \ref{figPropagation}) .
+    \end{enumerate}
+\end{enumerate}
+
+\begin{figure}[ht]
+    \centering
+    \illustrationKeepDim{propagation}
+    \caption{La contrainte \contrainte{3} est propagée sur la contrainte \contrainte{1} ; la durée de \contrainte{3} est en revanche déterminée par \contrainte{1} car cette dernière se déroulera forcément en premier. \label{figPropagation}}
+\end{figure}
+
+
+
+
+
+\begin{figure}[ht]
+    \centering
+    \illustrationKeepDim{incoherence1}
+    \caption{La date du Timenode 2 dépend d'un évènement futur. \label{figIncoherenceTemporelle}}
+\end{figure}
+
+\subsection{Indiquer la propagation des contraintes}
+
+Indiquer la propagation des contraintes sert à indiquer l'intervalle réel pendant lequel un timenode pourra être éxécuté.
+
+
+L'étude du \csp{} m'a amené à analyser d'autres aspects d'\iscore{} et de l'API \ossia{}, allant du formalisme de la composition interactive a l'étude du moteur d'exécution. Pour pouvoir assoir les bases du CSP, j'ai donc fait des proposition pour tenter d'apporter des réponses sur des éléments flou ou des situations problématiques.
+
+Chaque version d\iscore{} est l'occasion de retoucher le formalisme des relations temporelles et de la composition de scénario en général. La dernière version ne déroge pas à la règle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection{Règles}
+Au fil des scénarios et à force d'itérations, voici l'ensemble des règles que je propose, ainsi que les contrôles autorisés présentés sous forme de plusieurs scénarios explicites.
+
+\emph{NOTE: la notion d'évènement n'a pas de sens ici.}
+\begin{itemize}
+    \item Un timenode possède obligatoirement une contrainte le reliant à une second timenode passé ou à l'instant 0;
+    \item Une contrainte \contrainte{1} lie un timenode \timeNode{1} prédécesseur et un timenode \timeNode{2} successeur par une durée nominale \dureeNominale{1}, une souplesse en amont \souplesseAvant{1} et une souplesse en aval \souplesseApres{1}
+    \begin{itemize}
+        \item La durée nominale est définie telle que : $ \dureeNominale{1} \in \left [ O ... +\infty  \right [ $
+        \item La souplesse en amont \souplesseAvant{1} est définie tel que : $ 0 \leq \souplesseAvant{1} \leq \dureeNominale{1} $
+        \item La souplesse en aval \souplesseApres{1} est définie tel que : $ 0 \leq \souplesseApres{1} $
+    \end{itemize}
+\end{itemize}
+
+Pour des simplifier certains calculs, on utilisera les valeurs de butée min et max :
+\begin{itemize}
+    \item La butée minimum calculée telle que : $ \buteeMin{1} = \dureeNominale{1} - \souplesseAvant{1} $
+    \item La butée maximum calculée telle que : $ \buteeMax{1} = \dureeNominale{1} + \souplesseApres{1} $
+\end{itemize}
+
+On peut voir la représentation graphique de ces règles sur la figure \ref{figNotations}.
+
+Cet ensemble de règles nous permet de donner une réponse à la question : "existe-t-il une ou plusieurs solutions?", pour pouvoir donner une solution optimale, il conviendra alors d'ajouter des critères pour guider la solution. Ces critères s'expriment par une fonction de poids définie en fonction d'une contrainte et d'une distance (la distance entre ses deux timenodes) 
+
+La solution optimale se trouve alors en minimisant\footnote{On peut également choisir de maximiser, cela n'a que peu d'importance} le critère 
+\[ \sum_{i=0}^{n} weightFunction(Tnext_{i} - Tprev_{i} , C_i) \]
+avec $Tprev_i$~et $Tnext_i$~respectivement la date du timenode situé en amont et en aval de la contrainte \contrainte{i}.
+
+Ces définition permettent de réaliser n'importe quels contrôles au niveau de l'interface, et surtout plusieurs niveau de latitude\footnote{L'interface peut définir elle même la position de chaque timenode, ou bien laisser le CSP calculer la solution.}.
+\section{Implémentation}
+\subsection{Choix d'une bibliothèque}
+Je cherche un bibliothèque qui me permetra d'exprimer les contraintes sous leur forme mathémathique.
+
+Voici les cas testés:
+\subsubsection{Les scénarios valides}
+pas plusieurs starts
+
+reflexion : le comportement a la création d'un programme informatique : 
+
+Edition:
+Le développeur à toute libertée d'écrire n'importe quoi.
+En utilisant un IDE, le user peut cependant avoir un retour sur la validité de son programme.
+
+Compilation:
+Seul un programme valide peut être compilé.
+
+En programmation, cette méthode qui permet de passer par des états non valides pour atteindre des états valides et nécessaire, mais quand les le nombre d'éléments du formalisme et limité et surtout que l'on possède un éditeur de haut niveau (graphique)
+
+Execution:
+Un executable est forcément valide* pour l'éxécution
+
+*LOL
+
+
+matrice d'adjacence
+
+gecode
+cassowary
+google or
+
+
+
+autre
+
+papiers:
+merci a Simon Archipof pour les math et tout
+
+constraint logic programmin survey :
+\cite{jaffar1994constraint}
+
+temporal constraint network :
+\cite{dechter1991temporal}
+
+mémoire de stage bruno valeze
+\cite{valeze2006constraint}

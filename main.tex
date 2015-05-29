@@ -1,0 +1,41 @@
+\documentclass{report}
+
+\usepackage{import}
+\usepackage{simonj}
+
+%-------------------- DEBUT  Glossaire -------------------------
+\include{glossaire}
+%-------------------- FIN    Glossaire -------------------------
+
+\addbibresource{bibliography.bib}
+
+\title{Mémoire M2}
+\author{Simon Jamain}
+\date{\today}
+
+%---- inclusion des scenarios
+\import{schemas/}{graphics}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\import{chapitres/}{introduction}
+\import{chapitres/}{etat_de_l_art}
+\import{chapitres/}{resolution_de_csp}
+\import{chapitres/}{formalisation_des_relations_temporelles}
+\import{chapitres/}{implementations}
+\import{chapitres/}{conclusion_et_perspectives}
+
+%pour pas oublier
+%
+%You might also try converting your inkscape .svg file to .pdf using rsvg-convert from the librsvg2-bin package:
+%
+%rsvg-convert -f pdf -o foo.pdf foo.svg
+%This preserved transparency in my file.
+
+\printbibliography
+
+\end{document}

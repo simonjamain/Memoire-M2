@@ -1,0 +1,21 @@
+\chapter{Conclusion et perspectives}
+
+A l'issue de ce stage, les relations temporelles et leur comportement à l'exécution ont été formalisés avec précision, un nouvel élément a même été proposé.
+%
+Le formalisme graphique a été intégré directement au \csp{} et permet de produire facilement des exemples illustrés ou bien de contrôler visuellement l'interface graphique par rapport aux éléments bruts.
+%
+Nous avons proposés une solution pour compléter les failles du moteur d'exécution réalisée à partir d'automates temporisés, de sorte qu'ils prennent en compte toutes les dépendances entre toutes les relations temporelles.
+%L'API \ossia{} à été enrichi
+%l'architecture
+%element ajoutés
+Un module \csp{} a été développé à l'aide de la librairie or-tools ainsi qu'un modèle de contraintes qui permet de valider les scénarios et de calculer les intervalles réels entre deux timenodes.
+
+
+
+Pour la suite, il faut finaliser l'API \ossia{} et les traduire en objets manipulés par le \csp{}, un bon moyen est alors de faire hériter ces objets depuis ceux de l'API en ajoutant les éléments du modèle de contrainte propre au \csp{}.
+%
+Il faut également proposer des méthodes utilisables par l'interface qui gère le positionnement des éléments graphiques, chose compliquée à faire de façon algorithmique classique.
+%
+Le modèle correspondant aux automates temporisés ainsi que l'adaptation du scénario pour l'exécution doit être implémentée, c'est d'ailleurs la tâche que je vais réaliser en priorité à la fin du stage.
+
+Pour le futur, d'autres rôles pourront être donné au module \csp{} d'\iscore{} et je suis convaincu qu'au vu de la nature expérimentale et évolutive du projet la programmation par contrainte et un atout puissant du fait de son caractère déclaratif.

@@ -1,24 +1,56 @@
 \chapter{État de l'art}
 Dans ce chapitre nous introduisons le concept de programmation par contrainte et nous étudions les modèles liés aux temps. Nous regardons également les applications qui mettent en oeuvre ces principes et présentons le logiciel \iscore{}.
 \section{la programmation par contrainte}
-\begin{citeauteur}[Jean-Paul Sartre\cite{Delerue2003openmusic}]
+\begin{citeauteur}[Olivier Delerue\cite{Delerue2003openmusic}]
 Une contrainte est une relation, au sens mathématique que l’on souhaite à tout instant vérifiée. La programmation par contrainte consiste à aborder un problème au moyen de contraintes, d’une part en le décrivant complètement sous forme d’un ensemble de ces relations et d’autre part en produisant des algorithmes permettant d’aboutir rapidement à une solution, c'est-à-dire à un élément qui précisément vérifie toutes les propriétés énoncées.
 \end{citeauteur}
 
-La programmation par contraintes est une manière très déclarative d'aborder un problème, la première étape est de bien définir quel est le problème à résoudre, puis de le traduire sous forme de contraintes -- ce que nous appelons le modèle -- , ensuite, il s'agit d'utiliser un système qui nous permet de résoudre ces contraintes pour avoir une solution (ou pas mdr).
+La programmation par contraintes est une manière très déclarative d'aborder un problème, la première étape est de bien définir quel est le problème à résoudre, puis de le traduire sous forme de contraintes -- ce que nous appelons le modèle -- , ensuite, il s'agit d'utiliser un système (solveur de contrainte) qui nous permet de résoudre ces contraintes pour obtenir une solution le cas échéant.
 
-\begin{citeauteur}[Mary Poppins\cite{paper:freuder:1997}]
+\begin{citeauteur}[Eugene C. Freuder\cite{paper:freuder:1997}]
 Constraint Programming represents one of the closest approaches computer science has yet made to the Holy Grail of programming: the user states the problem, the computer solves it.
 \end{citeauteur}
 
-Dans le cadre de ce stage, il n'est pas question de créer un algorithme de résolution de contrainte qui trouve les solutions à un système donné, c'est une tâche très complexe et des implémentations existent déjà, nous devrons cependant faire un choix avisé concernant l'implémentation à utiliser.
+Dans le cadre de ce stage, il n'est pas question de créer solveur de contraintes, c'est une tâche très complexe et des implémentations existent déjà, nous devrons cependant faire un choix avisé concernant l'implémentation à utiliser.
 
-Tout d'abords regardons les modèles de contrainte appliqués au paradigme temporel.
+Tout d'abord regardons les modèles de contrainte appliqués au paradigme temporel.
 
 \subsection{les contraintes appliquées au domaine temporel}
 
-
 \section{\iscore{}}
-\subsection{boxes}% (origne etc)
-\subsection{0.2}
-\subsection{0.3}% (édition & execution)
+
+Le logiciel \iscore{} présente une implémentation du concept de scénarios interactifs, nous allons voir comment ce projet est née, quelles sont ses ambitions et surtout quelle est sont utilisation des solveurs de contraintes. Si, comme nous allons le voir, les solveurs ont été utilisés dès le début comme une aide à l'édition de pièces musicales -- comme c'est le cas au sein du logiciel Boxes -- ils se sont avérés très utiles lorsque que la notion d'interactivité est apparu avec \iscore{}.
+
+\subsection{boxes}% (origine etc)
+
+Boxes\cite{Beurive2000boxes} est un logiciel de composition musicale qui propose un plan de travail en deux dimensions \figureRef{boxesPreview} sur lequel on vient placer des portions audio contenues dans des boites. Ces boites peuvent elles-mêmes être contenues dans d'autres de façon à créer une hiérachie.
+
+\schema{boxesPreview}{L'interface de \boxes{}}
+
+Le fonctionnement est assez simple, c'est la position sur l'axe horizontal qui détermine le moment ou sera joué une boite. Le positionnement des boites étant directement lié à la structure temporelle du morceau, un système de contraintes à été mis en place pour protéger l'intégrité de la pièce lors des modifications du compositeur.
+
+Les contraintes de boxes découlent de relations d'Allen \figureRef{allen} que le compositeur peut spécifier entre chacune des boites pour en conserver l'agencement.
+
+\schema{allen}{Les différentes relations de Allen illustrées.}
+
+Une des premières implémentation d'\iscore{} s'est appuyé sur \openmusic{}, un logiciel utilisé pour la composition musicale. \openmusic{} possède un environnement de "maquette" qui ressemble à \boxes{}. \openmusic{} se démarque par le fait qu'il soit orienté pour faire de la synthèse audio grâce à la technologie \osc{} et grace à la notion d'évènements qui lui permettent d'envoyer des commandes à des modules externes comme des patchs Max ou Pure Data. \openmusic{} offre également la possibilité de déclencher manuellement l'envoi de messages \osc{} ce qui introduit déjà de l'interactivité.
+
+Les chercheurs du \acrshort{scrime}\cite{Scrime2015} ont souhaités intégrer les contraintes présentes \boxes{}\cite{allombert:hal-00353628} pour permettre de contrôler l'interactivité et de l'inscrire dans la démarche de composition.
+
+Ce faisant, les utilisations ont mis en avant le besoin d'introduire des contraintes plus fines que les relations d'Allen. Ces nouvelles contraintes -- que nous appellerons relations temporelles -- contraignent deux évènements entre eux par un intervalle de durée $[Val_{min}, Val_{max}]$ les séparant. Cet intervalle est lui-même inclus dans l'intervalle $[0,+\infty]$, et on en distinguera trois types :
+
+\begin{itemize}
+
+\item rigide, quand $Val_{min} = Val_{max}$ ;
+
+\item souple, quand $[Val_{min}, Val_{max}] = [0,+\infty]$ ;
+
+\item semi-rigide, pour tout autre $[Val_{min}, Val_{max}]$.
+
+\end{itemize}
+
+Ces relations temporelles vont alors être utilisés dès la version 0.2 d'\iscore{}.
+
+\subsection{\iscore{} 0.2}
+
+\subsection{\iscore{} 0.3}% (édition & execution)

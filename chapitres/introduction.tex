@@ -7,18 +7,18 @@ Prenons l'exemple d'un feux d'artifice pour illustrer ce que l'on entend par app
 \schema{exempleIntroduction}{Les différents éléments composant le feu d'artifice.}
 
 Aujourd'hui de telles applications utilisent couramment des logiciels de programmation visuelle\cite{Cycling742015}\cite{Pure2015}.
-Ces logiciels utilisent une approche -- que l'on appellera approche logique -- qui consiste à créer des modules (appelés patchs) composés de séries d'instructions, seulement, ces modules sont organisés sur un plan et sont tous déclenchables à n'importe quel instant \figureRef{schemaLogique}. Ainsi pour que le spectacle se déroule comme prévu, l'opérateur doit faire très attention aux éléments qu'il déclenche ainsi qu'à leur durée.
+Ces logiciels utilisent une approche -- que l'on appellera approche logique -- qui consiste à créer des modules (appelés patchs) composés de séries d'instructions, seulement, ces modules sont organisés sur un plan et sont tous déclenchables à n'importe quel instant \figureRef{schemaLogique}. Ainsi pour que le spectacle se déroule comme prévu, l'opérateur doit donc faire attention lorsqu'il déclenche un allumage, ou envoie la musique.
 
 \schema{schemaLogique}{L'approche logique de la conception d'application interactive, les actions ne sont pas organisée de manière temporelle.}
 
 %TODO : plus soft sur les séquenceurs
 Cette approche rends ces logiciels peu adroits pour hiérarchiser temporellement des évènements. Les séquenceurs, de leurs cotés -- très utilisés pour la composition musicale -- ne laissent presque aucune marge de manoeuvre pour interagir avec le système lors de l'exécution de la performance.
 
-De cette problématique est né le projet ANR \ossia{} -- Open Scenario System for Interactive Application --, il s'intéresse à l'écriture, et l'exécution de scénarios "multimédias" temporels interactifs. Ces scénarios permettent de décrire, de manière plus ou moins ouverte, le déroulement de la performance au cours du temps, ce qui rend plus naturel la composition de performances principalement temporelles (cf. figure \ref{schemaComplexite})
+De cette problématique est né le projet ANR \ossia{} -- Open Scenario System for Interactive Application --, il s'intéresse à l'écriture, et l'exécution de scénarios "multimédias" temporels interactifs. Ces scénarios permettent de décrire, de manière plus ou moins ouverte, le déroulement d'une performance au cours du temps, ce qui rend plus naturel la composition de performances principalement temporelles \figureRef{schemaComplexite}.
 
 \schema{schemaComplexite}{L'effort à fournir pour créer des applications multimédias interactives en fonction de la nature de la performance.}
 
-Ces scénarios peuvent être vus comme une séquence d'évènements à réaliser au cours du temps (cf. figure \ref{schemaTemporel}), tel une partition de musique, dont certains peuvent être déclenchés manuellement au moment jugé le plus opportun.
+Ces scénarios peuvent être vus comme une séquence d'évènements à réaliser au cours du temps \figureRef{schemaTemporel}, tel une partition de musique, dont certains peuvent être déclenchés manuellement au moment jugé le plus opportun, ainsi on garde quand même une marge de manoeuvre sur le scénario et c'est en cela que réside le caractère interactif.
 
 \schema{schemaTemporel}{L'approche temporelle des scénario interactif permet de décrire la hiérarchie des évènements au cours du temps.}
 
@@ -45,8 +45,6 @@ Une solution considérée est d'utiliser la programmation par contrainte. L'util
 \emph{Note : par abus de language, nous appelerons par la suite \csp{} le solveur de contrainte en lui-même.}
 
 Ma mission est de formaliser les éléments scénaristiques ainsi que leur comportement exacte attendu, élaborer des modèles de contraintes correspondant, déterminer le ou les rôles du \csp{} au sein du fonctionnement du logiciel et ensuite implémenter les solutions à mettre en oeuvre les solutions pour les implémentant proposés.
-
-\tikzSchema{\schemaScenarioPresentation}{testTikz}{test caption}
 
 %---------- Vocabulaire
 \printglossary[type=\acronymtype]

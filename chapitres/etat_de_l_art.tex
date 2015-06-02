@@ -13,60 +13,67 @@ Constraint Programming represents one of the closest approaches computer science
 
 \subsection{Utilisation et role d'un solveur de contrainte}
 
-Je vais illustrer l'utilisation d'un solveur de contrainte par une version simple d'un exemple classique utilisé notamment dans la documentation\footnote{Manuel d'utilisateur \ortools{} \href{https://drive.google.com/file/d/0B7kalaGEbfufQ0h0N3J4TkVVaDQ/view?usp=sharing}{or-tools manual}, section 2.3 exemple CP+IS+FUN=TRUE}\footnote{\href{http://www.gecode.org/doc-latest/MPG.pdf}{Manuel d'utilisateur \gecode{}, chapitre 2 exemple SEND+MORE=MONEY}} de deux implémentation que je présenterais plus tard.
+Un solveur de contraintes accepte des variables de domaines définit (liste des valeurs possibles) ainsi que des contraintes sur leurs valeurs, et retourne une ou plusieurs solutions \figureRef{fonctionnementSolveur}. Nous verrons que dans le cas ou il existe plusieurs solutions, il est possible de définir des critère pour trier les solutions.
+
+\schema{fonctionnementSolveur}{Un solveur de contraintes accepte des variables ainsi que des contraintes par rapport à celles-ci et tente de fournir une solution, c-à-d des valeurs de variables qui satisfassent toutes les contraintes posées.}
+
+Je vais illustrer l'utilisation d'un solveur de contrainte par une version simple d'un exemple classique utilisé notamment dans la documentation\footnote{Manuel d'utilisateur \ortools{} \href{https://drive.google.com/file/d/0B7kalaGEbfufQ0h0N3J4TkVVaDQ/view?usp=sharing}{or-tools manual}, section 2.3, exemple CP+IS+FUN=TRUE}\footnote{\href{http://www.gecode.org/doc-latest/MPG.pdf}{Manuel d'utilisateur \gecode{}, chapitre 2, exemple SEND+MORE=MONEY}} de deux implémentations que je présenterais plus tard.
 
 Cet exemple et celui du puzzle "cryptarithméique" le problème et le suivant :
 
 Compte tenu la phrase suivante BO + NJ = OUR existe t'il un moyen de remplacer chaque lettre par un chiffre\footnote{On prendra des chiffres en base 10 mais on pourrait également changer la base.} pour que l'équation soit correcte? On précise que la valeur assignée à des lettres identiques doit être la même, on ajoutera également que la valeur de lettres différentes doit être également différente et que chaque nombre formé par un mot ne doit pas commencer par un zéro.
 
-Pour obtenir une solution nous déclarons les différentes variables entière ainsi que leur domaine qui est donc $[0,1...9]$ pour J, U et R et $[1,2...9]$ pour B, N et O car il se trouvent en début de mot.
-\emph{À noter que nous aurions pus utiliser des dommaines plus vaste et les restreindre grâce à des contraintes, mais c'est en général plus coûteux, et moins explicite pour cet exemple.}
-Nous allons maintenant établir les contraintes nécessaires, et nous allons voir que ces contraintes découlent naturellement des spécifications du problème, et qu'elle s'expriment sous forme d'équation.
+Pour obtenir une solution nous déclarons les différentes variables entières ainsi que leur domaine qui est donc $[0,1...9]$ pour J, U et R et $[1,2...9]$ pour B, N et O car ils se trouvent en début de mot.
+
+\emph{À noter que nous aurions pu utiliser des domaines plus vaste et les restreindre grâce à des contraintes, mais c'est en général plus coûteux et moins explicite pour cet exemple.}
+
+Nous allons maintenant établir les contraintes nécessaires, et nous allons voir que ces contraintes découlent naturellement des spécifications du problème et qu'elles peuvent s'exprimer sous forme d'équation.
 
 Nous voulons les valeurs de nos varibles B,O,N,J,U et R toutes différentes pour cela nous pouvons l'exprimer par de multiples contraintes de type $B \neq O$ etc... Pour nous aider, les solveurs de contraintes proposent en général des contraintes de plus haut niveau, et c'est le cas de la contrainte \textbf{allDifferent} qui réalise précisément ce que l'on veut, nous entrons donc la contrainte $\mathrm{allDifferent}([B,O,N,J,U,R])$.
 
 Il ne nous reste plus qu'a exprimer la relation entre nos mots, pour ceci, nous pouvons décomposer en définissant $mot1$, $mot2$ et $mot3$ puis en posant $mot1+mot2=mot3$ ou directement en une ligne telle que : $(B*10 + O) +(N*10 +J) = O*100+U*10+R$.
 
-Le solveur à maintenant toutes les donner pour trouver des solutions à notre problème, 
+Le solveur a maintenant toutes les données pour trouver des solutions à notre problème, vous trouverez l'implémentaiton de ce probleme en annexe \ref{annexePuzzle}, pour information une des solutions est ${B:2,O:1,N:8,J:3,U:0,R:4}$ soit $21+83=104$.
 
-\figureRef{fonctionnementSolveur}{Un solveur de contraintes accepte des variables ainsi que des contraintes par rapport à celles-ci et tente de fournir une solution, c-à-d des valeurs de variables qui satisfasse toutes les contraintes posée.}
 
 
 
 \subsection{les solveurs de contraintes}
-
 Dans le cadre de ce stage, il n'est pas question de créer solveur de contraintes, c'est une tâche très complexe et des implémentations existent déjà, nous devrons cependant faire un choix avisé concernant l'implémentation à utiliser.
 
 Tout d'abord regardons les différents solveurs existant.
 
-\subsection{les solveurs de contraintes}
+\subsection{les solveurs de contraintes existants}
 
-Tout d'abord, il est important de savoir que le logiciel \iscore{} est codé en langage \cpp{}, nous allons donc préférer des solveur proposant une interface dans ce langage pour une utilisation finale. À noter que la liste suivante n'est pas exhaustive.%finir pharse mieux
+Tout d'abord, il est important de savoir que le logiciel \iscore{} est codé en langage \cpp{}, nous allons donc préférer des solveurs proposant une interface dans ce langage pour une utilisation finale. À noter que la liste suivante n'est pas exhaustive.%finir pharse mieux
 
 \subsubsection{\matlab}
-\subsubsection{\gecode}
-\subsubsection{\cassowary}
-\subsubsection{\choco}
-\subsubsection{\ortools}
 
+\subsubsection{\gecode}
+
+\subsubsection{\cassowary}
+
+\subsubsection{\choco}
+
+\subsubsection{\ortools}
 
 \section{\iscore{}}
 
-Le logiciel \iscore{} présente une implémentation du concept de scénarios interactifs, nous allons voir comment ce projet est née, quelles sont ses ambitions et surtout quelle est sont utilisation des solveurs de contraintes. Si, comme nous allons le voir, les solveurs ont été utilisés dès le début comme une aide à l'édition de pièces musicales -- comme c'est le cas au sein du logiciel Boxes -- ils se sont avérés très utiles lorsque que la notion d'interactivité est apparu avec \iscore{}.
+Le logiciel \iscore{} présente une implémentation du concept de scénarios interactifs, nous allons voir comment ce projet est né, quelles sont ses ambitions et surtout quelle est sont utilisation des solveurs de contraintes. Si, comme nous allons le voir, les solveurs ont été utilisés dès le début comme une aide à l'édition de pièces musicales -- comme c'est le cas au sein du logiciel Boxes -- ils se sont avérés très utiles lorsque que la notion d'interactivité est apparu avec \iscore{}.
 
 \subsection{boxes}% (origine etc)
 
-Boxes\cite{Beurive2000boxes} est un logiciel de composition musicale qui propose un plan de travail en deux dimensions \figureRef{boxesPreview} sur lequel on vient placer des portions audio contenues dans des boites. Ces boites peuvent elles-mêmes être contenues dans d'autres de façon à créer une hiérachie.
+Boxes\cite{Beurive2000boxes} est un logiciel de composition musicale qui propose un plan de travail en deux dimensions \figureRef{boxesPreview} sur lequel on vient placer des portions audio contenues dans des boites. Ces boites peuvent elles-mêmes êtres contenues dans d'autres de façon à créer une hiérachie.
 
 \schema{boxesPreview}{L'interface de \boxes{}}
 
-Le fonctionnement est assez simple, c'est la position sur l'axe horizontal qui détermine le moment ou sera joué une boite. Le positionnement des boites étant directement lié à la structure temporelle du morceau, un système de contraintes à été mis en place pour protéger l'intégrité de la pièce lors des modifications du compositeur.
+Le fonctionnement est assez simple, c'est la position sur l'axe horizontal qui détermine le moment ou sera joué une boite. Le positionnement des boites étant directement lié à la structure temporelle du morceau, un système de contraintes a été mis en place pour protéger l'intégrité de la pièce lors des modifications du compositeur.
 
 Les contraintes de boxes découlent de relations d'Allen \figureRef{allen} que le compositeur peut spécifier entre chacune des boites pour en conserver l'agencement.
 
 \schema{allen}{Les différentes relations de Allen illustrées.}
 
-Une des premières implémentation d'\iscore{} s'est appuyé sur \openmusic{}, un logiciel utilisé pour la composition musicale. \openmusic{} possède un environnement de "maquette" qui ressemble à \boxes{}. \openmusic{} se démarque par le fait qu'il soit orienté pour faire de la synthèse audio grâce à la technologie \osc{} et grace à la notion d'évènements qui lui permettent d'envoyer des commandes à des modules externes comme des patchs Max ou Pure Data. \openmusic{} offre également la possibilité de déclencher manuellement l'envoi de messages \osc{} ce qui introduit déjà de l'interactivité.
+Une des premières implémentations d'\iscore{} s'est appuyé sur \openmusic{}, un logiciel utilisé pour la composition musicale. \openmusic{} possède un environnement de "maquette" qui ressemble à \boxes{}. \openmusic{} se démarque par le fait qu'il soit orienté pour faire de la synthèse audio grâce à la technologie \osc{} et grace à la notion d'évènements qui lui permettent d'envoyer des commandes à des modules externes comme des patchs Max ou Pure Data. \openmusic{} offre également la possibilité de déclencher manuellement l'envoi de messages \osc{} ce qui introduit déjà de l'interactivité.
 
 Les chercheurs du \acrshort{scrime}\cite{Scrime2015} ont souhaités intégrer les contraintes présentes \boxes{}\cite{allombert:hal-00353628} pour permettre de contrôler l'interactivité et de l'inscrire dans la démarche de composition.
 
@@ -88,27 +95,30 @@ La version 0.2 d'\iscore{}\footnote{\url{https://github.com/i-score/i-score/tree
 
 Dans cette version le positionnement absolu des boites sur l'axe horizontal n'est pas déterminant sur le moment du déclenchement, une boite posée seule est déclenchable à tout moment.
 
-Les relations temporelles induisent des contraintes qui sont gérée avec l'aide d'un solveur de contrainte
+Les relations temporelles induisent des contraintes qui sont gérées avec l'aide d'un solveur de contrainte
 
 %moteur d'exécution
 
 \subsection{\iscore{} 0.3}% (édition & execution)
 
 La dernière version d'\iscore{}, actuellement en développement\footnote{\url{https://github.com/OSSIA/i-score}} \iscore{}, est la version 0.3.
+
 Cette nouvelle version a plusieurs objectifs :
+
 \begin{itemize}
     \item améliorer les contrôles et l'intuitivité de l'interface ;
     \item pouvoir inclure des scénarios dans les boites d'autres scénarios ;
     \item intégrer les boucles\footnote{Une boucle est le fait de répéter une boite.} ;
     \item donner plus d'importance aux relations temporelles ;
-    \item pouvoir programmer des scénario sur des FPGA\footnote{\emph{field-programmable gate array} ou \emph{Circuit logique programmable}, ce sont des circuit intégré construit à base de portes logiques. Ils on l'avantage de présenter une fiabilité et une stabilité supérieure à un ordinateur personnel.} ;
+    \item pouvoir programmer des scénario sur des FPGA\footnote{\emph{field-programmable gate array} ou \emph{Circuit logique programmable}, ce sont des circuit intégré construit à base de portes logiques. Ils ont l'avantage de présenter une fiabilité et une stabilité supérieure à un ordinateur personnel.} ;
     \item lors de l'exécution :
     \begin{itemize}
         \item n'afficher qu'un seul curseur de temps ;
-        \item afficher les évènement passé à la position exacte à laquelle ceux-ci se sont déroulés.
+        \item afficher les évènements passé à la position exacte à laquelle ceux-ci se sont déroulés.
     \end{itemize}
 \end{itemize}
 
 Pour l'instant, cette version ne présente qu'une interface d'édition et utilise le moteur de la version 0.2 pour exécuter des scénarios. Le moteur d'exécution d'\iscore{} 0.3 est développé par Jaime Arias, grâce à l'utilisation d'automates
-elle n'intègre pas encore de solveur de contrainte, et le positionnement des élément est pour l'instant géré de façon empirique.
+
+elle n'intègre pas encore de solveur de contraintes et le positionnement des éléments est pour l'instant géré de façon empirique.
 

@@ -3,6 +3,7 @@
 \def\hauteurMoy{30mm}
 %-------------------- FIN   Variables---------------------------
 %-------------------- DEBUT Packages ---------------------------
+\usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
 \usepackage{csquotes}
 \usepackage{graphicx}
@@ -15,7 +16,7 @@
 \usepackage{algorithmic}
 \usepackage[utf8]{inputenc}
 \usepackage{subcaption}
-
+\usepackage{minted}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage[scaled]{helvet}
@@ -114,6 +115,8 @@ Topics:
 }{%
     \end{itemize}
 }
+
+\newcommand{\annexe}[2]{\clearpage \section{#1} \section{#2}}
 
 \newenvironment{citeauteur}[1][1]{%
 	\def\citeauteurarg{#1}\par\smallskip\leftskip.1\linewidth\rightskip.1\linewidth<<\kern0.16em\relax\itshape\nobreak\ignorespaces

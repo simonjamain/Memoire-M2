@@ -40,9 +40,7 @@ Au sein de cet environnement (cf. figure \ref{figDeploiement}) il est primordial
 
 Pour s'en assurer on peut concevoir des algorithmes ad-hoc qui lors de la composition préviennent ce genre de cas, cette solution s'offre néanmoins de plusieurs problèmes. Le premier souci est de s'assurer du bon fonctionnement de l'algorithme, la seconde chose qu'une telle solution sera difficilement évolutive ce qui est gênant quant au caractère expérimental d'\iscore{} et l'objectif de recherche du groupe \ossia{}.
 
-Une solution considérée est d'utiliser la programmation par contrainte. L'utilisation d'un resolveur (solver) de contrainte ou solver de \acrshort{csp}, que je suis amené à élaborer lors de ce stage, permettra de répondre de façon fiable aux questions de validation mais également (de par son caractère déclaratif) de faciliter la modification du comportement d'\iscore{}.
-
-\emph{Note : par abus de language, nous appelerons par la suite \csp{} le solveur de contrainte en lui-même.}
+Une solution considérée est d'utiliser la programmation par contrainte. L'utilisation d'un système de gestion de contraintes, que je suis amené à élaborer lors de ce stage, permettra de répondre de façon fiable aux questions de validation mais également (de par son caractère déclaratif) de faciliter la modification du comportement d'\iscore{}.
 
 Ma mission est de formaliser les éléments scénaristiques ainsi que leur comportement exacte attendu, élaborer des modèles de contraintes correspondant, déterminer le ou les rôles du \csp{} au sein du fonctionnement du logiciel et ensuite implémenter les solutions à mettre en oeuvre les solutions pour les implémentant proposés.
 

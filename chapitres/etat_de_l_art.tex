@@ -1,5 +1,5 @@
 \chapter{État de l'art}
-Dans ce chapitre nous introduisons le concept de programmation par contrainte et nous étudions les modèles liés aux temps. Nous regardons également les applications qui mettent en oeuvre ces principes et présentons le logiciel \iscore{}.
+Dans ce chapitre nous introduisons le concept de programmation par contrainte et nous étudions les solutions existantes. Nous regardons également les applications qui mettent en oeuvre ces principes et présentons le logiciel \iscore{}.
 \section{la programmation par contrainte}
 \begin{citeauteur}[Olivier Delerue\cite{Delerue2003openmusic}]
 Une contrainte est une relation, au sens mathématique que l’on souhaite à tout instant vérifiée. La programmation par contrainte consiste à aborder un problème au moyen de contraintes, d’une part en le décrivant complètement sous forme d’un ensemble de ces relations et d’autre part en produisant des algorithmes permettant d’aboutir rapidement à une solution, c'est-à-dire à un élément qui précisément vérifie toutes les propriétés énoncées.
@@ -11,11 +11,44 @@ La programmation par contraintes est une manière très déclarative d'aborder u
 Constraint Programming represents one of the closest approaches computer science has yet made to the Holy Grail of programming: the user states the problem, the computer solves it.
 \end{citeauteur}
 
+\subsection{Utilisation et role d'un solveur de contrainte}
+
+Je vais illustrer l'utilisation d'un solveur de contrainte par une version simple d'un exemple classique utilisé notamment dans la documentation\footnote{Manuel d'utilisateur \ortools{} \href{https://drive.google.com/file/d/0B7kalaGEbfufQ0h0N3J4TkVVaDQ/view?usp=sharing}{or-tools manual}, section 2.3 exemple CP+IS+FUN=TRUE}\footnote{\href{http://www.gecode.org/doc-latest/MPG.pdf}{Manuel d'utilisateur \gecode{}, chapitre 2 exemple SEND+MORE=MONEY}} de deux implémentation que je présenterais plus tard.
+
+Cet exemple et celui du puzzle "cryptarithméique" le problème et le suivant :
+
+Compte tenu la phrase suivante BO + NJ = OUR existe t'il un moyen de remplacer chaque lettre par un chiffre\footnote{On prendra des chiffres en base 10 mais on pourrait également changer la base.} pour que l'équation soit correcte? On précise que la valeur assignée à des lettres identiques doit être la même, on ajoutera également que la valeur de lettres différentes doit être également différente et que chaque nombre formé par un mot ne doit pas commencer par un zéro.
+
+Pour obtenir une solution nous déclarons les différentes variables entière ainsi que leur domaine qui est donc $[0,1...9]$ pour J, U et R et $[1,2...9]$ pour B, N et O car il se trouvent en début de mot.
+\emph{À noter que nous aurions pus utiliser des dommaines plus vaste et les restreindre grâce à des contraintes, mais c'est en général plus coûteux, et moins explicite pour cet exemple.}
+Nous allons maintenant établir les contraintes nécessaires, et nous allons voir que ces contraintes découlent naturellement des spécifications du problème, et qu'elle s'expriment sous forme d'équation.
+
+Nous voulons les valeurs de nos varibles B,O,N,J,U et R toutes différentes pour cela nous pouvons l'exprimer par de multiples contraintes de type $B \neq O$ etc... Pour nous aider, les solveurs de contraintes proposent en général des contraintes de plus haut niveau, et c'est le cas de la contrainte \textbf{allDifferent} qui réalise précisément ce que l'on veut, nous entrons donc la contrainte $\mathrm{allDifferent}([B,O,N,J,U,R])$.
+
+Il ne nous reste plus qu'a exprimer la relation entre nos mots, pour ceci, nous pouvons décomposer en définissant $mot1$, $mot2$ et $mot3$ puis en posant $mot1+mot2=mot3$ ou directement en une ligne telle que : $(B*10 + O) +(N*10 +J) = O*100+U*10+R$.
+
+Le solveur à maintenant toutes les donner pour trouver des solutions à notre problème, 
+
+\figureRef{fonctionnementSolveur}{Un solveur de contraintes accepte des variables ainsi que des contraintes par rapport à celles-ci et tente de fournir une solution, c-à-d des valeurs de variables qui satisfasse toutes les contraintes posée.}
+
+
+
+\subsection{les solveurs de contraintes}
+
 Dans le cadre de ce stage, il n'est pas question de créer solveur de contraintes, c'est une tâche très complexe et des implémentations existent déjà, nous devrons cependant faire un choix avisé concernant l'implémentation à utiliser.
 
-Tout d'abord regardons les modèles de contrainte appliqués au paradigme temporel.
+Tout d'abord regardons les différents solveurs existant.
 
-\subsection{les contraintes appliquées au domaine temporel}
+\subsection{les solveurs de contraintes}
+
+Tout d'abord, il est important de savoir que le logiciel \iscore{} est codé en langage \cpp{}, nous allons donc préférer des solveur proposant une interface dans ce langage pour une utilisation finale. À noter que la liste suivante n'est pas exhaustive.%finir pharse mieux
+
+\subsubsection{\matlab}
+\subsubsection{\gecode}
+\subsubsection{\cassowary}
+\subsubsection{\choco}
+\subsubsection{\ortools}
+
 
 \section{\iscore{}}
 
@@ -40,17 +73,42 @@ Les chercheurs du \acrshort{scrime}\cite{Scrime2015} ont souhaités intégrer le
 Ce faisant, les utilisations ont mis en avant le besoin d'introduire des contraintes plus fines que les relations d'Allen. Ces nouvelles contraintes -- que nous appellerons relations temporelles -- contraignent deux évènements entre eux par un intervalle de durée $[Val_{min}, Val_{max}]$ les séparant. Cet intervalle est lui-même inclus dans l'intervalle $[0,+\infty]$, et on en distinguera trois types :
 
 \begin{itemize}
-
 \item rigide, quand $Val_{min} = Val_{max}$ ;
-
 \item souple, quand $[Val_{min}, Val_{max}] = [0,+\infty]$ ;
-
 \item semi-rigide, pour tout autre $[Val_{min}, Val_{max}]$.
-
 \end{itemize}
 
 Ces relations temporelles vont alors être utilisés dès la version 0.2 d'\iscore{}.
 
 \subsection{\iscore{} 0.2}
 
+La version 0.2 d'\iscore{}\footnote{\url{https://github.com/i-score/i-score/tree/release/0.2}} arrive avec un formalisme détaillé\cite{hogue2014ossia} décrivant les éléments destinés à composer les scénario interactifs ainsi que les principes desquels ils découlent. On peut voir \figureRef{iscore02} dans cette version l'héritage de \boxes{} et \openmusic{} par l'utilisation de boites et d'évènements.
+
+\schema{iscore02}{L'interface d'\iscore{} 0.2 : l'explorateur de contrôles \osc{} à gauche et la surface d'édition à droite. On peut voir une relation temporelle semi-rigide entre Box2 et Box3 et une relation rigide entre Box2 et Box4. La durée de la boite Box4 est une relation souple. Chaque relation non rigide entraîne le création d'un trigger point -- ou point de déclenchement --, une condition binaire qui permet par exemple écouter la valeur d'une variable. }
+
+Dans cette version le positionnement absolu des boites sur l'axe horizontal n'est pas déterminant sur le moment du déclenchement, une boite posée seule est déclenchable à tout moment.
+
+Les relations temporelles induisent des contraintes qui sont gérée avec l'aide d'un solveur de contrainte
+
+%moteur d'exécution
+
 \subsection{\iscore{} 0.3}% (édition & execution)
+
+La dernière version d'\iscore{}, actuellement en développement\footnote{\url{https://github.com/OSSIA/i-score}} \iscore{}, est la version 0.3.
+Cette nouvelle version a plusieurs objectifs :
+\begin{itemize}
+    \item améliorer les contrôles et l'intuitivité de l'interface ;
+    \item pouvoir inclure des scénarios dans les boites d'autres scénarios ;
+    \item intégrer les boucles\footnote{Une boucle est le fait de répéter une boite.} ;
+    \item donner plus d'importance aux relations temporelles ;
+    \item pouvoir programmer des scénario sur des FPGA\footnote{\emph{field-programmable gate array} ou \emph{Circuit logique programmable}, ce sont des circuit intégré construit à base de portes logiques. Ils on l'avantage de présenter une fiabilité et une stabilité supérieure à un ordinateur personnel.} ;
+    \item lors de l'exécution :
+    \begin{itemize}
+        \item n'afficher qu'un seul curseur de temps ;
+        \item afficher les évènement passé à la position exacte à laquelle ceux-ci se sont déroulés.
+    \end{itemize}
+\end{itemize}
+
+Pour l'instant, cette version ne présente qu'une interface d'édition et utilise le moteur de la version 0.2 pour exécuter des scénarios. Le moteur d'exécution d'\iscore{} 0.3 est développé par Jaime Arias, grâce à l'utilisation d'automates
+elle n'intègre pas encore de solveur de contrainte, et le positionnement des élément est pour l'instant géré de façon empirique.
+

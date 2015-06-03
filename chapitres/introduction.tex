@@ -2,21 +2,34 @@
 
 Les applications multimédias interactives forment un domaine vaste, on y retrouve un nombre croissant de performances artistiques avec des créateurs désireux d'exploiter le potentiel technologique (informatique) actuel pour étendre le champ des possibles.
 
-Prenons l'exemple d'un feux d'artifice pour illustrer ce que l'on entend par application multimédia interactive. Le feu d'artifice \figureRef{exempleIntroduction} est composé d'éléments à déclencher tels des allumages, mais aussi de musique et de danseurs à synchroniser.
+Prenons un exemple pour illustrer le concept d'application multimédia interactive. Un metteur en scène souhaite adapter le film \emph{les aventuriers de l'arche perdue}\footnote{La fiche du film sur imdb : \url{http://www.imdb.com/title/tt0082971/}} en spectacle vivant et notamment la scène finale \emph{*alerte spoiler*} ou les soldats ouvrent l'arche. Dans cette scène on assiste à une cérémonie rituelle comprenant un discours prononcé par un protagoniste puis l'ouverture d'un coffre antique appelée l'arche, duquel vont s'échapper des spectres tueurs.
+
+Pour cette scène l'artiste souhaite exploiter divers médias dont nous allons sélectionner quelques-uns pour exemple.
+%
+Dans un premier temps, les comédiens commencent à jouer le rituel, puis vers le milieu de celui-ci on commence à envoyer un son d'ambiance qui monte crescendo et enfin, peu avant la fin du rituel et l'arrivée des spectres, on envoie de la fumée autour de l'arche à l'aide d'un dispositif électronique, nous ne nous intéressons pas à ce qui advient par la suite.
+
+Cette mise en scène \figureRef{exempleIntroduction} peut être géré par une application multimédia interactive, voyons comment.
 
 \schema{exempleIntroduction}{Les différents éléments composant le feu d'artifice.}
 
-Aujourd'hui de telles applications utilisent couramment des logiciels de programmation visuelle\cite{Cycling742015}\cite{Pure2015}.
-Ces logiciels utilisent une approche -- que l'on appellera approche logique -- qui consiste à créer des modules (appelés patchs) composés de séries d'instructions, seulement, ces modules sont organisés sur un plan et sont tous déclenchables à n'importe quel instant \figureRef{schemaLogique}. Ainsi pour que le spectacle se déroule comme prévu, l'opérateur doit donc faire attention lorsqu'il déclenche un allumage, ou envoie la musique.
+Il existe des logiciels de programmation visuelle\cite{Cycling742015}\cite{Pure2015} dont les deux plus connus sont \emph{Max} et son homologue libre \emph{Pure Data}.
 
-\schema{schemaLogique}{L'approche logique de la conception d'application interactive, les actions ne sont pas organisée de manière temporelle.}
+Ces logiciels utilisent une approche qui consiste à créer des modules (appelés \textbf{\glspl{patch}}) composés de séries d'instructions ou d'autres \glspl{patch} et pouvant êtres inter-connectés grâce à des entrées et des sorties.
+%
+Ces patchs peuvent fonctionner de manière indépendante et exécuter toute sorte d'instruction, on citera l'envoi et la reception de messages \midi{}\footnote{Page de présentation du standart \midi{} le site web du \emph{midi manufacturers association} : \url{http://web.archive.org/web/20150407151144/http://www.midi.org/aboutmidi/index.php}} ou \acrfull{osc}\cite{osc2002conf}, la synthèse sonore, ou encore l'envoi et le traitement de flux vidéos.
 
-%TODO : plus soft sur les séquenceurs
-Cette approche rends ces logiciels peu adroits pour hiérarchiser temporellement des évènements. Les séquenceurs, de leurs cotés -- très utilisés pour la composition musicale -- ne laissent presque aucune marge de manoeuvre pour interagir avec le système lors de l'exécution de la performance.
+Les patchs sont exécutables de manière indépendante, dans l'exemple de notre application interactive, on peut en créer un pour chaque évènement à lancer comme la musique, le fondu de volume, ou l'arrivée des spectres. Ceci étant il est risqué de gérer ces patch de façon anarchique, les régisseurs vont donc ordonner les contrôles en rédigeant une conduite\footnote{En anglais \emph{cue list}, c'est une séquence ordonnée d'états comprenant des actions à réaliser}, sous forme papier et/ou en organisant visuellement les patchs sur le logiciel \figureRef{patchs}.
 
-De cette problématique est né le projet ANR \ossia{} -- Open Scenario System for Interactive Application --, il s'intéresse à l'écriture, et l'exécution de scénarios "multimédias" temporels interactifs. Ces scénarios permettent de décrire, de manière plus ou moins ouverte, le déroulement d'une performance au cours du temps, ce qui rend plus naturel la composition de performances principalement temporelles \figureRef{schemaComplexite}.
+\schema{patchs}{Une organisation possible sous forme de \glspl{patch} de la séquence de l'ouverture de l'arche.}
 
-\schema{schemaComplexite}{L'effort à fournir pour créer des applications multimédias interactives en fonction de la nature de la performance.}
+Le défaut de cette approche est l'écart entre la représentation du spectacle sur le logiciel et son déroulement réel dans le temps.
+%
+Il existe un type de logiciel qui ne soufre pas de ce défaut, ce sont les séquenceurs, surtout utilisés pour la composition musicale. Les séquenceurs permettent de placer les évènements -- qui sont en général des notes -- sur un axe temporel un peu à la manière dont ils sont écrits sur la figure \ref{exempleIntroduction}. Cependant, cette nouvelle approche possède quand même un défaut qui se révèle de taille dans le cadre du spectacle vivant et de la performance en direct : les temps sont rigides et il n'y a pas d'interactivité possible.
+
+
+De cette problématique est né le projet ANR \ossia{} -- Open Scenario System for Interactive Application --, il s'intéresse à l'écriture, et l'exécution de scénarios "multimédias" temporels interactifs. Ces scénarios permettent de décrire, de manière plus ou moins ouverte, le déroulement d'une performance au cours du temps, ce qui rend plus naturel la composition de performances principalement temporelles.
+
+%\schema{schemaComplexite}{L'effort à fournir pour créer des applications multimédias interactives en fonction de la nature de la performance.}
 
 Ces scénarios peuvent être vus comme une séquence d'évènements à réaliser au cours du temps \figureRef{schemaTemporel}, tel une partition de musique, dont certains peuvent être déclenchés manuellement au moment jugé le plus opportun, ainsi on garde quand même une marge de manoeuvre sur le scénario et c'est en cela que réside le caractère interactif.
 

@@ -41,21 +41,50 @@ Le solveur a maintenant toutes les données pour trouver des solutions à notre 
 \subsection{les solveurs de contraintes}
 Dans le cadre de ce stage, il n'est pas question de créer solveur de contraintes, c'est une tâche très complexe et des implémentations existent déjà, nous devrons cependant faire un choix avisé concernant l'implémentation à utiliser.
 
-Tout d'abord regardons les différents solveurs existant.
+Tout d'abord, il est important de savoir que le logiciel \iscore{} est codé en langage \cpp{}, nous allons donc préférer des solveurs proposant une interface dans ce langage pour une utilisation finale. À noter que la liste suivante n'est pas exhaustive.%finir phrase mieux
 
-\subsection{les solveurs de contraintes existants}
+\subsubsection{\matlab{}}
+Un des outils que j'aime utiliser pour faire du prototypage est \matlab{}. \matlab{} regroupe à la fois un langage de script, Un environnement de développement ainsi que des modules -- appelées toolbox -- offrant des fonctionnalités de haut niveau spécialisés dans divers domaines scientifique.
 
-Tout d'abord, il est important de savoir que le logiciel \iscore{} est codé en langage \cpp{}, nous allons donc préférer des solveurs proposant une interface dans ce langage pour une utilisation finale. À noter que la liste suivante n'est pas exhaustive.%finir pharse mieux
+La toolbox \emph{Symbolic Math}\footnote{Page web de la \href{http://fr.mathworks.com/products/symbolic/}{Symbolic Math Toolbox}.}, permet notamment de résoudre des systèmes d'équations (grâce à des solveurs\footnote{Les différents solveurs proposés par le toolbox : \url{http://web.archive.org/web/20150602192607/http://fr.mathworks.com/help/symbolic/algebraic-equations-and-systems.html?nocookie=true}}) ce qui est intéressant car les principales contraintes que je serait amener à résoudre se ramèneront à des systèmes d'équations.
 
-\subsubsection{\matlab}
+\matlab{} à pour avantage d'être une solution clé en main permettant d'avoir des résultat rapidement, je m'en sert donc pour tester mes idées avant d'aller plus loin dans l'implémentation.
 
-\subsubsection{\gecode}
+\subsubsection{\gecode{}}
 
-\subsubsection{\cassowary}
+\gecode{} est la bibliothèque logicielle actuellement utilisée par la dernière release d'\iscore{}\footnote{Lien Github du module CSP d'\iscore{} \url{https://github.com/i-score/JamomaCore/tree/dev/Score/extensions/Scenario/source}}\footnote{En annexe \ref{HeritageI-scoreNew}}. 
+Gecode existe depuis 2005\footnote{La page de changeLog de \gecode{} : \url{http://web.archive.org/web/20131122052359/http://www.gecode.org/doc-latest/reference/PageChange.html}}, la bibliothèque est codée en \cpp{} et sa rapidité\cite{Minizinc2015} ainsi que sa license permissive (MIT\cite{Mit2015}) en on fait une solution utilisée par une grande communauté.
 
-\subsubsection{\choco}
+\subsubsection{\cassowary{}}
 
-\subsubsection{\ortools}
+\begin{citeauteur}[Greg J. Badros\footnotemark{}]
+Cassowary is an incremental constraint solving toolkit that efficiently solves systems of linear equalities and inequalities. Constraints may be either requirements or preferences. Client code specifies the constraints to be maintained, and the solver updates the constrained variables to have values that satisfy the constraints.
+\end{citeauteur}
+
+Cassowary est à la fois un algorithme\cite{Borning:1997:SLA:263407.263518} et un solveur de contraintes\cite{Badros98thecassowary} écrit en Smalltalk, \cpp{}, Java, and Python\footnotemark[\value{footnote}]{}.
+
+\footnotetext{Page web de \cassowary{} : \url{http://web.archive.org/web/20150603075607/http://constraints.cs.washington.edu/cassowary/}}
+
+Tel que décrit dans l'article\cite{Borning:1997:SLA:263407.263518}, \cassowary{} a été conçu pour travailler avec des interfaces graphiques, l'algorithme est notamment utilisé par l'auto layout de Apple\cite{sadun2013ios} qui gère le positionnement des éléments graphiques grâce à des contraintes que spécifie l'utilisateur.
+
+Il existe des implémentations modernes de cassowary, notamment une en \cpp{} appellée \kiwi{}\footnote{Github du projet \kiwi{} : \url{https://github.com/nucleic/kiwi}}
+
+\subsubsection{\ortools{}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{\iscore{}}
 
@@ -93,9 +122,7 @@ La version 0.2 d'\iscore{}\footnote{\url{https://github.com/i-score/i-score/tree
 
 \schema{iscore02}{L'interface d'\iscore{} 0.2 : l'explorateur de contrôles \osc{} à gauche et la surface d'édition à droite. On peut voir une relation temporelle semi-rigide entre Box2 et Box3 et une relation rigide entre Box2 et Box4. La durée de la boite Box4 est une relation souple. Chaque relation non rigide entraîne le création d'un trigger point -- ou point de déclenchement --, une condition binaire qui permet par exemple écouter la valeur d'une variable. }
 
-Dans cette version le positionnement absolu des boites sur l'axe horizontal n'est pas déterminant sur le moment du déclenchement, une boite posée seule est déclenchable à tout moment.
-
-Les relations temporelles induisent des contraintes qui sont gérées avec l'aide d'un solveur de contrainte
+Les relations temporelles induisent des contraintes qui sont gérées avec l'aide d'un solveur de contrainte, actuellement \gecode{} 
 
 %moteur d'exécution
 

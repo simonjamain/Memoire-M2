@@ -6,9 +6,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
+\usepackage{xcolor}
 \usepackage{csquotes}
 \usepackage{graphicx}
 \usepackage{datetime}
+\usepackage{mdframed}
+\usepackage[labelformat = empty]{subcaption}
 \usepackage{setspace}
 \usepackage{xspace}
 \usepackage{tabu}
@@ -27,12 +30,13 @@
 \usepackage{relsize}
 \usepackage{hyperref}
 \usepackage{geometry}
+\usepackage[final]{pdfpages}
 \usepackage[
 backend=biber,
 style=alphabetic,
 sorting=ynt
 ]{biblatex}
-\usepackage[acronym]{glossaries}
+\usepackage[section=subsection, acronym]{glossaries}
 
 
 \makeglossaries
@@ -68,6 +72,8 @@ Topics:
 {\includegraphics[#2]{#1}}
 \newcommand{\illustrationKeepDim}[1]%
 {\includegraphics[max width =\textwidth ]{#1}}
+\newcommand{\illustrationKeepGivenDim}[2]%
+{\includegraphics[max width =#2]{#1}}
 
 \newcommand{\figureRef}[1]{(cf. figure \ref{#1})}
 
@@ -77,6 +83,27 @@ Topics:
 \begin{figure}[h]%
     \centering%
     \illustrationKeepDim{#1}%
+    \caption{#2 \label{#1}}%
+\end{figure}%
+}
+% we use the file name for the label as well
+% 1,2 : label name and caption
+% 3,4 : label/image and caption
+% 5,6 : idem
+\newcommand{\biSchema}[6]%
+{%
+\begin{figure}[h]%
+    \centering%
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \illustrationKeepDim{#3}
+        \caption{#4 \label{#3}}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \illustrationKeepDim{#5}
+        \caption{#6 \label{#5}}
+    \end{subfigure}
     \caption{#2 \label{#1}}%
 \end{figure}%
 }
@@ -124,5 +151,21 @@ Topics:
 	\def\citeauteurarg{#1}\par\smallskip\leftskip.1\linewidth\rightskip.1\linewidth<<\kern0.16em\relax\itshape\nobreak\ignorespaces
 	}{\unskip\nobreak\kern0.16em>>\quad\unless\ifx\empty\citeauteur\normalfont(\citeauteurarg)\fi\par\smallskip}
 
+\newenvironment{apparte}
+  {\begin{mdframed}[style=0,%
+      leftline=false,rightline=false,leftmargin=2em,%
+          innerleftmargin=0pt,innerrightmargin=0pt,linewidth=0.75pt,%
+      skipabove=7pt,skipbelow=7pt]\small}
+  {\end{mdframed}}
+
+\newcommand{\accede}[1]{\emph{(accédé le #1)}}
+\newcommand{\archive}[1]{\emph{(archive)}}
 
 %-------------------- FIN    Commandes -------------------------
+%-------------------- DEBUT  Charte graphique ------------------
+% outil utile : http://www.psyclops.com/tools/rgb/
+\definecolor{colorPri}{RGB}{75, 133, 189}% #4B85BD
+\definecolor{colorSec}{RGB}{78, 189, 75}% #4EBD4B
+\definecolor{colorTer}{RGB}{212, 108, 114}% #D46C72
+
+%-------------------- FIN    Charte graphique ------------------

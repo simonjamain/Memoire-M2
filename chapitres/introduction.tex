@@ -10,13 +10,13 @@ Dans un premier temps, les comédiens commencent à jouer le rituel, puis vers l
 
 Cette mise en scène \figureRef{exempleIntroduction} peut être géré par une application multimédia interactive, voyons comment.
 
-\schema{exempleIntroduction}{Les différents éléments composant le feu d'artifice.}
+\schema{exempleIntroduction}{Les différents éléments composant la scène.}
 
 Il existe des logiciels de programmation visuelle\cite{Cycling742015}\cite{Pure2015} dont les deux plus connus sont \emph{Max} et son homologue libre \emph{Pure Data}.
 
 Ces logiciels utilisent une approche qui consiste à créer des modules (appelés \textbf{\glspl{patch}}) composés de séries d'instructions ou d'autres \glspl{patch} et pouvant êtres inter-connectés grâce à des entrées et des sorties.
 %
-Ces patchs peuvent fonctionner de manière indépendante et exécuter toute sorte d'instruction, on citera l'envoi et la reception de messages \midi{}\footnote{Page de présentation du standart \midi{} le site web du \emph{midi manufacturers association} : \url{http://web.archive.org/web/20150407151144/http://www.midi.org/aboutmidi/index.php}} ou \acrfull{osc}\cite{osc2002conf}, la synthèse sonore, ou encore l'envoi et le traitement de flux vidéos.
+Ces patchs peuvent fonctionner de manière indépendante et exécuter toute sorte d'instruction, on citera l'envoi et la reception de messages \midi{}\footnote{Page de présentation du standart \midi{} le site web du \emph{midi manufacturers association} : \url{http://web.archive.org/web/20150407151144/http://www.midi.org/aboutmidi/index.php} \archive{}} ou \acrfull{osc}\cite{osc2002conf}, la synthèse sonore, ou encore l'envoi et le traitement de flux vidéos.
 
 Les patchs sont exécutables de manière indépendante, dans l'exemple de notre application interactive, on peut en créer un pour chaque évènement à lancer comme la musique, le fondu de volume, ou l'arrivée des spectres. Ceci étant il est risqué de gérer ces patch de façon anarchique, les régisseurs vont donc ordonner les contrôles en rédigeant une conduite\footnote{En anglais \emph{cue list}, c'est une séquence ordonnée d'états comprenant des actions à réaliser}, sous forme papier et/ou en organisant visuellement les patchs sur le logiciel \figureRef{patchs}.
 
@@ -27,13 +27,11 @@ Le défaut de cette approche est l'écart entre la représentation du spectacle 
 Il existe un type de logiciel qui ne soufre pas de ce défaut, ce sont les séquenceurs, surtout utilisés pour la composition musicale. Les séquenceurs permettent de placer les évènements -- qui sont en général des notes -- sur un axe temporel un peu à la manière dont ils sont écrits sur la figure \ref{exempleIntroduction}. Cependant, cette nouvelle approche possède quand même un défaut qui se révèle de taille dans le cadre du spectacle vivant et de la performance en direct : les temps sont rigides et il n'y a pas d'interactivité possible.
 
 
-De cette problématique est né le projet ANR \ossia{} -- Open Scenario System for Interactive Application --, il s'intéresse à l'écriture, et l'exécution de scénarios "multimédias" temporels interactifs. Ces scénarios permettent de décrire, de manière plus ou moins ouverte, le déroulement d'une performance au cours du temps, ce qui rend plus naturel la composition de performances principalement temporelles.
+De cette problématique est né le projet ANR \ossia{} -- Open Scenario System for Interactive Application --, il s'intéresse à l'écriture, et l'exécution de scénarios "multimédias" temporels interactifs. Ces scénarios permettent de décrire, de manière plus ou moins ouverte, le déroulement d'une performance au cours du temps, ce qui rend plus naturelle la composition de performances principalement temporelles.
 
 %\schema{schemaComplexite}{L'effort à fournir pour créer des applications multimédias interactives en fonction de la nature de la performance.}
 
-Ces scénarios peuvent être vus comme une séquence d'évènements à réaliser au cours du temps \figureRef{schemaTemporel}, tel une partition de musique, dont certains peuvent être déclenchés manuellement au moment jugé le plus opportun, ainsi on garde quand même une marge de manoeuvre sur le scénario et c'est en cela que réside le caractère interactif.
-
-\schema{schemaTemporel}{L'approche temporelle des scénario interactif permet de décrire la hiérarchie des évènements au cours du temps.}
+Ces scénarios peuvent être vus comme une séquence d'évènements à réaliser au cours du temps, tel une partition de musique, dont certains peuvent être déclenchés manuellement au moment jugé le plus opportun, ainsi on garde quand même une marge de manoeuvre sur le scénario et c'est en cela que réside le caractère interactif.
 
 Le logiciel \iscore{}, développé par \ossia{}, implémente le concept de scénario interactifs et fournit une interface d'édition ainsi qu'un moteur d'exécution. Une version 0.2 d'\iscore{} existe déjà et la version 0.3 est actuellement en cours de développement, c'est dans le cadre de l'élaboration cette dernière version que s'inscrit mon stage. 
 
@@ -50,14 +48,13 @@ Une solution logicielle est en cours de développement, elle est composée de pl
 \section*{Problématique}
 
 Au sein de cet environnement (cf. figure \ref{figDeploiement}) il est primordial de contrôler l'intégrité des scénarios. Contrôler l'intégrité des scénarios veut dire vérifier que les relations temporelles placés dans un scénario sont exécutables, par exemple si je dis que qu'un évènement A doit se dérouler strictement après un évènement B et que B doit se dérouler strictement après A, alors il est impossible d'exécuter ce scénario.
+Ce contrôle intervient à plusieurs niveaux : au niveau de l'interface l'utilisateur peut être guidé dans ses choix et être informé à l'avance des situations problématique, c'est ce que l'on appellera le problème de configuration (voir annexe \ref{annexeSujetStage})
 
 Pour s'en assurer on peut concevoir des algorithmes ad-hoc qui lors de la composition préviennent ce genre de cas, cette solution s'offre néanmoins de plusieurs problèmes. Le premier souci est de s'assurer du bon fonctionnement de l'algorithme, la seconde chose qu'une telle solution sera difficilement évolutive ce qui est gênant quant au caractère expérimental d'\iscore{} et l'objectif de recherche du groupe \ossia{}.
+
+
 
 Une solution considérée est d'utiliser la programmation par contrainte. L'utilisation d'un système de gestion de contraintes, que je suis amené à élaborer lors de ce stage, permettra de répondre de façon fiable aux questions de validation mais également (de par son caractère déclaratif) de faciliter la modification du comportement d'\iscore{}.
 
 Ma mission est de formaliser les éléments scénaristiques ainsi que leur comportement exacte attendu, élaborer des modèles de contraintes correspondant, déterminer le ou les rôles du \csp{} au sein du fonctionnement du logiciel et ensuite implémenter les solutions à mettre en oeuvre les solutions pour les implémentant proposés.
 
-%---------- Vocabulaire
-\printglossary[type=\acronymtype]
- 
-\printglossary

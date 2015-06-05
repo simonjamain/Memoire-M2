@@ -29,7 +29,7 @@ Pour obtenir une solution nous déclarons les différentes variables entières a
 
 Nous allons maintenant établir les contraintes nécessaires, et nous allons voir que ces contraintes découlent naturellement des spécifications du problème et qu'elles peuvent s'exprimer sous forme d'équation.
 
-Nous voulons les valeurs de nos varibles B,O,N,J,U et R toutes différentes pour cela nous pouvons l'exprimer par de multiples contraintes de type $B \neq O$ etc... Pour nous aider, les solveurs de contraintes proposent en général des contraintes de plus haut niveau, et c'est le cas de la contrainte \textbf{allDifferent} qui réalise précisément ce que l'on veut, nous entrons donc la contrainte $\mathrm{allDifferent}([B,O,N,J,U,R])$.
+Nous voulons les valeurs de nos varibles B,O,N,J,U et R toutes différentes pour cela nous pouvons l'exprimer par de multiples contraintes de type $B \neq O$ etc... Pour nous aider, les solveurs de contraintes proposent en général des contraintes de plus haut niveau, et c'est le cas de la contrainte \textbf{allDifferent}\footnote{Pour des exemple de contraintes on peut se reférer au \emph{Global Constraint Catalog}, qui établie une liste de contraintes standard avec leur comportement attendu : \url{http://sofdem.github.io/gccat/gccat/sec5.html}} qui réalise précisément ce que l'on veut, nous entrons donc la contrainte $\mathrm{allDifferent}([B,O,N,J,U,R])$.
 
 Il ne nous reste plus qu'a exprimer la relation entre nos mots, pour ceci, nous pouvons décomposer en définissant $mot1$, $mot2$ et $mot3$ puis en posant $mot1+mot2=mot3$ ou directement en une ligne telle que : $(B*10 + O) +(N*10 +J) = O*100+U*10+R$.
 
@@ -46,14 +46,14 @@ Tout d'abord, il est important de savoir que le logiciel \iscore{} est codé en 
 \subsubsection{\matlab{}}
 Un des outils que j'aime utiliser pour faire du prototypage est \matlab{}. \matlab{} regroupe à la fois un langage de script, Un environnement de développement ainsi que des modules -- appelées toolbox -- offrant des fonctionnalités de haut niveau spécialisés dans divers domaines scientifique.
 
-La toolbox \emph{Symbolic Math}\footnote{Page web de la \href{http://fr.mathworks.com/products/symbolic/}{Symbolic Math Toolbox}.}, permet notamment de résoudre des systèmes d'équations (grâce à des solveurs\footnote{Les différents solveurs proposés par le toolbox : \url{http://web.archive.org/web/20150602192607/http://fr.mathworks.com/help/symbolic/algebraic-equations-and-systems.html?nocookie=true}}) ce qui est intéressant car les principales contraintes que je serait amener à résoudre se ramèneront à des systèmes d'équations.
+La toolbox \emph{Symbolic Math}\footnote{Page web de la \href{http://fr.mathworks.com/products/symbolic/}{Symbolic Math Toolbox}.}, permet notamment de résoudre des systèmes d'équations (grâce à des solveurs\footnote{Les différents solveurs proposés par le toolbox : \url{http://web.archive.org/web/20150602192607/http://fr.mathworks.com/help/symbolic/algebraic-equations-and-systems.html?nocookie=true}} \archive{}) ce qui est intéressant car les principales contraintes que je serait amener à résoudre se ramèneront à des systèmes d'équations.
 
 \matlab{} à pour avantage d'être une solution clé en main permettant d'avoir des résultat rapidement, je m'en sert donc pour tester mes idées avant d'aller plus loin dans l'implémentation.
 
 \subsubsection{\gecode{}}
 
 \gecode{} est la bibliothèque logicielle actuellement utilisée par la dernière release d'\iscore{}\footnote{Lien Github du module CSP d'\iscore{} \url{https://github.com/i-score/JamomaCore/tree/dev/Score/extensions/Scenario/source}}\footnote{En annexe \ref{HeritageI-scoreNew}}. 
-Gecode existe depuis 2005\footnote{La page de changeLog de \gecode{} : \url{http://web.archive.org/web/20131122052359/http://www.gecode.org/doc-latest/reference/PageChange.html}}, la bibliothèque est codée en \cpp{} et sa rapidité\cite{Minizinc2015} ainsi que sa license permissive (MIT\cite{Mit2015}) en on fait une solution utilisée par une grande communauté.
+Gecode existe depuis 2005\footnote{La page de changeLog de \gecode{} : \url{http://web.archive.org/web/20131122052359/http://www.gecode.org/doc-latest/reference/PageChange.html} \archive{}}, la bibliothèque est codée en \cpp{} et sa rapidité\cite{Minizinc2015} ainsi que sa license permissive (MIT\cite{Mit2015}) en on fait une solution utilisée par une grande communauté.
 
 \subsubsection{\cassowary{}}
 
@@ -63,7 +63,7 @@ Cassowary is an incremental constraint solving toolkit that efficiently solves s
 
 Cassowary est à la fois un algorithme\cite{Borning:1997:SLA:263407.263518} et un solveur de contraintes\cite{Badros98thecassowary} écrit en Smalltalk, \cpp{}, Java, and Python\footnotemark[\value{footnote}]{}.
 
-\footnotetext{Page web de \cassowary{} : \url{http://web.archive.org/web/20150603075607/http://constraints.cs.washington.edu/cassowary/}}
+\footnotetext{Page web de \cassowary{} : \url{http://web.archive.org/web/20150603075607/http://constraints.cs.washington.edu/cassowary/} \archive{}}
 
 Tel que décrit dans l'article\cite{Borning:1997:SLA:263407.263518}, \cassowary{} a été conçu pour travailler avec des interfaces graphiques, l'algorithme est notamment utilisé par l'auto layout de Apple\cite{sadun2013ios} qui gère le positionnement des éléments graphiques grâce à des contraintes que spécifie l'utilisateur.
 
@@ -71,11 +71,19 @@ Il existe des implémentations modernes de cassowary, notamment une en \cpp{} ap
 
 \subsubsection{\ortools{}}
 
+\ortools{} est une suite logicielle sous license apache\footnote{Page web de la licence Apache : \url{http://web.archive.org/web/20150602185139/http://www.apache.org/licenses/LICENSE-2.0} \archive{}} développée et utilisée par \google{}\footnote{Page web d'\ortools{} sur \google{} developers : \url{https://developers.google.com/optimization/} \accede{04/06/2015}}.
+%
+\begin{citeauteur}[Nikolaj van Omme,Laurent Perron, Vincent Furnon \cite{or-tools-user-manual}]
+The or-tools library is a set of operations research tools written in C++ at Google. The main tools are:
+• A Constraint Programming solver.
+• A simple and unified interface to several linear programming and mixed integer program-
+ming solvers (CBC, CLP, GLOP, GLPK, Gurobi, SCIP and Sulum).
+• Knapsack algorithms.
+• Graph algorithms (shortest paths, min cost flow, max flow, linear sum assignment).
+• FlatZinc support.
+\end{citeauteur}
 
-
-
-
-
+Depuis deux ans, or-tools s'est installé en tête de liste du concours MiniZinc\cite{Minizinc2015}, nous verrons par la suite que c'est cette bibliothèque qui à été choisie pour coder une partie du module \csp{}.
 
 
 
@@ -106,7 +114,7 @@ Une des premières implémentations d'\iscore{} s'est appuyé sur \openmusic{}, 
 
 Les chercheurs du \acrshort{scrime}\cite{Scrime2015} ont souhaités intégrer les contraintes présentes \boxes{}\cite{allombert:hal-00353628} pour permettre de contrôler l'interactivité et de l'inscrire dans la démarche de composition.
 
-Ce faisant, les utilisations ont mis en avant le besoin d'introduire des contraintes plus fines que les relations d'Allen. Ces nouvelles contraintes -- que nous appellerons relations temporelles -- contraignent deux évènements entre eux par un intervalle de durée $[Val_{min}, Val_{max}]$ les séparant. Cet intervalle est lui-même inclus dans l'intervalle $[0,+\infty]$, et on en distinguera trois types :
+Ce faisant, les utilisations ont mis en avant le besoin d'introduire des contraintes plus fines que les relations d'Allen. Ces nouvelles contraintes -- que nous appellerons relations temporelles (\acrshort{rt}) -- contraignent deux évènements entre eux par un intervalle de durée $[Val_{min}, Val_{max}]$ les séparant. Cet intervalle est lui-même inclus dans l'intervalle $[0,+\infty]$, et on en distinguera trois types :
 
 \begin{itemize}
 \item rigide, quand $Val_{min} = Val_{max}$ ;
@@ -122,9 +130,10 @@ La version 0.2 d'\iscore{}\footnote{\url{https://github.com/i-score/i-score/tree
 
 \schema{iscore02}{L'interface d'\iscore{} 0.2 : l'explorateur de contrôles \osc{} à gauche et la surface d'édition à droite. On peut voir une relation temporelle semi-rigide entre Box2 et Box3 et une relation rigide entre Box2 et Box4. La durée de la boite Box4 est une relation souple. Chaque relation non rigide entraîne le création d'un trigger point -- ou point de déclenchement --, une condition binaire qui permet par exemple écouter la valeur d'une variable. }
 
-Les relations temporelles induisent des contraintes qui sont gérées avec l'aide d'un solveur de contrainte, actuellement \gecode{} 
+Les relations temporelles induisent des contraintes qui sont gérées avec l'aide du module \csp{} utilisé sur \boxes{}
+solveur de contrainte \gecode{}, leurs rôle est de gérer la position des éléments du scénario, et notamment lors de déplacements générés par l'utilisateur. 
 
-%moteur d'exécution
+%L'exécution des scénarios 
 
 \subsection{\iscore{} 0.3}% (édition & execution)
 
@@ -145,7 +154,42 @@ Cette nouvelle version a plusieurs objectifs :
     \end{itemize}
 \end{itemize}
 
-Pour l'instant, cette version ne présente qu'une interface d'édition et utilise le moteur de la version 0.2 pour exécuter des scénarios. Le moteur d'exécution d'\iscore{} 0.3 est développé par Jaime Arias, grâce à l'utilisation d'automates
+Pour l'instant, cette version ne présente qu'une interface d'édition et utilise le moteur de la version 0.2 pour exécuter des scénarios. Le moteur d'exécution d'\iscore{} 0.3 est développé par Jaime Arias, grâce à l'utilisation d'automates.
+Cette version n'intègre pas encore de solveur de contraintes et le positionnement des éléments est pour l'instant géré de façon empirique.
 
-elle n'intègre pas encore de solveur de contraintes et le positionnement des éléments est pour l'instant géré de façon empirique.
+\section{Le formalisme actuel}
 
+Nous savons que les scénarios interactifs consistent à agencer dans le temps des processus (boites) grâce notamment à des relations temporelles plus ou moins rigides, nous allons maintenant voir comment le groupe \ossia{} a formalisé ces éléments de composition tout en introduisant une représentation graphique de ceux-ci \figureRef{composants}.
+
+En s'appuyant notamment sur le dernier article d'\ossia{}\cite{ossia2015interface} on dénombre les éléments de base suivants :
+
+\emph{Note : sur les articles d'\ossia{} les relations temporelles sont appellée contraintes, nous avons changé volontairement ce terme pour éviter toute ambigüité avec le terme contrainte associé au solveurs.}
+
+\begin{itemize}
+
+    \item Les \textbf{évènements}, ils décrivent une action à réaliser et sont placés sur des \glspl{timenode} et sont déclenchés par une condition qui est évalué tout au long son intervalle d'évaluation que nous expliciterons juste après ;
+    
+    \item Les \textbf{\glspl{timenode}}, qui sont des points de synchronisations temporels un \gls{timenode} est exécuté lorsqu'un de ces évènement est déclenché ou lorsqu'il arrive à la fin de l'intervalle d'évaluation de ces évènements;
+
+    \item Les \textbf{\glspl{relationTemporelle}} ou \acrshort{rt} lient un évènement antérieur $a$ à un évènement postérieur $b$ (ainsi que les deux timenodes auxquels sont attachés les évènements), déterminant l'intervalle d'évaluation de $b$ par grâce à des butée minimum et maximum par rapport à $a$;
+
+\end{itemize}
+
+L'intervalle d'évaluation réel d'un évènement postérieur d'une \acrshort{rt} sont déterminés par la combinaison de toutes les \acrshort{rt} influant directement ou indirectement sur cet intervalle (Nous verrons en \autoref{passage:automates} comment le \csp{} peut permettre d'obtenir ces intervalles en temps réel), cet intervalle se termine également après que le \gls{timenode} sur lequel il est attaché soit exécuté (a cause d'un autre évènement par exemple).
+
+Les évènements antérieurs d'une \acrshort{rt} ou les évènements isolés sont évalué une seule fois, à l'instant ou le \gls{timenode} auquel ils sont attaché est exécuté.
+
+\begin{apparte}
+La condition de déclenchement d'un évènement peut écouter une variable, attendre un évènement ponctuel, ou bien attendre la fin de l'intervalle, et l'on peut combiner ces conditions une une seule (grâce à des opérateurs ET et OU).
+\end{apparte}
+
+\biSchema{graphisme}{Le formalisme graphique légèrement revisité.}%
+{composants}{\textcolor{colorPri}{(a)} : \gls{timenode} ; %
+                    \textcolor{colorPri}{(b)} \acrshort{rt} souple ; %
+                    \textcolor{colorPri}{(c)} \acrshort{rt} rigide ; %
+                    \textcolor{colorPri}{(d,e,f)} \acrshort{rt} semi-rigide ; %
+                    les évènements sont représentés par des points%
+                    }%
+{composants2}{Les butées d'une relation temporelle et l'influence sur l'intervalle d'évaluation des évènements.}
+
+Le groupe \ossia{} à choisi 

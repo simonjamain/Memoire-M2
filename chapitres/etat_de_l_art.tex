@@ -2,10 +2,10 @@
 Dans ce chapitre nous introduisons le concept de programmation par contrainte et nous étudions les solutions existantes. Nous regardons également les applications qui mettent en oeuvre ces principes et présentons le logiciel \iscore{}.
 \section{la programmation par contrainte}
 \begin{citeauteur}[Olivier Delerue\cite{Delerue2003openmusic}]
-Une contrainte est une relation, au sens mathématique que l’on souhaite à tout instant vérifiée. La programmation par contrainte consiste à aborder un problème au moyen de contraintes, d’une part en le décrivant complètement sous forme d’un ensemble de ces relations et d’autre part en produisant des algorithmes permettant d’aboutir rapidement à une solution, c'est-à-dire à un élément qui précisément vérifie toutes les propriétés énoncées.
+Une contrainte est une relation, au sens mathématique que l’on souhaite à tout instant vérifiée. La programmation par contraintes consiste à aborder un problème au moyen de contraintes, d’une part en le décrivant complètement sous forme d’un ensemble de ces relations et d’autre part en produisant des algorithmes permettant d’aboutir rapidement à une solution, c'est-à-dire à un élément qui précisément vérifie toutes les propriétés énoncées.
 \end{citeauteur}
 
-La programmation par contraintes est une manière très déclarative d'aborder un problème, la première étape est de bien définir quel est le problème à résoudre, puis de le traduire sous forme de contraintes -- ce que nous appelons le modèle -- , ensuite, il s'agit d'utiliser un système (solveur de contrainte) qui nous permet de résoudre ces contraintes pour obtenir une solution le cas échéant.
+La programmation par contraintes permet d'aborder un problème de manière déclarative, la première étape est de bien définir quel est le problème à résoudre, puis de le traduire sous forme de contraintes -- ce que nous appelons le modèle -- , ensuite, il s'agit d'utiliser un système (solveur de contrainte) qui nous permet de résoudre ces contraintes pour obtenir une solution le cas échéant.
 
 \begin{citeauteur}[Eugene C. Freuder\cite{paper:freuder:1997}]
 Constraint Programming represents one of the closest approaches computer science has yet made to the Holy Grail of programming: the user states the problem, the computer solves it.
@@ -13,9 +13,12 @@ Constraint Programming represents one of the closest approaches computer science
 
 \subsection{Utilisation et role d'un solveur de contrainte}
 
-Un solveur de contraintes accepte des variables de domaines définit (liste des valeurs possibles) ainsi que des contraintes sur leurs valeurs, et retourne une ou plusieurs solutions \figureRef{fonctionnementSolveur}. Nous verrons que dans le cas ou il existe plusieurs solutions, il est possible de définir des critère pour trier les solutions.
+Un solveur de contraintes accepte des variables de domaines définit (liste des valeurs possibles) ainsi que des contraintes sur leurs valeurs, et retourne une ou plusieurs solutions.
+Une solution présente une affectation des variables initiales avec une valeur de leur domaine permettant de satisfaire toutes les contraintes.
+Les contraintes sont des conditions booléenes, elles peuvent prendre par exemple la forme d'une équation ou d'une inéquation.
+Nous verrons que dans le cas ou il existe plusieurs solutions, il est possible de définir des critère pour trier les solutions.
 
-\schema{fonctionnementSolveur}{Un solveur de contraintes accepte des variables ainsi que des contraintes par rapport à celles-ci et tente de fournir une solution, c-à-d des valeurs de variables qui satisfassent toutes les contraintes posées.}
+%\schema{fonctionnementSolveur}{Un solveur de contraintes accepte des variables ainsi que des contraintes par rapport à celles-ci et tente de fournir une solution, c-à-d des valeurs de variables qui satisfassent toutes les contraintes posées.}
 
 Je vais illustrer l'utilisation d'un solveur de contrainte par une version simple d'un exemple classique utilisé notamment dans la documentation\footnote{Manuel d'utilisateur \ortools{} \href{https://drive.google.com/file/d/0B7kalaGEbfufQ0h0N3J4TkVVaDQ/view?usp=sharing}{or-tools manual}, section 2.3, exemple CP+IS+FUN=TRUE}\footnote{\href{http://www.gecode.org/doc-latest/MPG.pdf}{Manuel d'utilisateur \gecode{}, chapitre 2, exemple SEND+MORE=MONEY}} de deux implémentations que je présenterais plus tard.
 
@@ -96,7 +99,7 @@ Depuis deux ans, or-tools s'est installé en tête de liste du concours MiniZinc
 
 \section{\iscore{}}
 
-Le logiciel \iscore{} présente une implémentation du concept de scénarios interactifs, nous allons voir comment ce projet est né, quelles sont ses ambitions et surtout quelle est sont utilisation des solveurs de contraintes. Si, comme nous allons le voir, les solveurs ont été utilisés dès le début comme une aide à l'édition de pièces musicales -- comme c'est le cas au sein du logiciel Boxes -- ils se sont avérés très utiles lorsque que la notion d'interactivité est apparu avec \iscore{}.
+Le logiciel \iscore{} présente une implémentation du concept de scénarios interactifs, nous allons voir comment ce projet est né, quelles sont ses ambitions et surtout quelle est son utilisation des solveurs de contraintes. Si, comme nous allons le voir, les solveurs ont été utilisés dès le début comme une aide à l'édition de pièces musicales -- comme c'est le cas au sein du logiciel Boxes -- ils se sont avérés très utiles lorsque que la notion d'interactivité est apparue avec \iscore{}.
 
 \subsection{boxes}% (origine etc)
 
@@ -112,7 +115,7 @@ Les contraintes de boxes découlent de relations d'Allen \figureRef{allen} que l
 
 Une des premières implémentations d'\iscore{} s'est appuyé sur \openmusic{}, un logiciel utilisé pour la composition musicale. \openmusic{} possède un environnement de "maquette" qui ressemble à \boxes{}. \openmusic{} se démarque par le fait qu'il soit orienté pour faire de la synthèse audio grâce à la technologie \osc{} et grace à la notion d'évènements qui lui permettent d'envoyer des commandes à des modules externes comme des patchs Max ou Pure Data. \openmusic{} offre également la possibilité de déclencher manuellement l'envoi de messages \osc{} ce qui introduit déjà de l'interactivité.
 
-Les chercheurs du \acrshort{scrime}\cite{Scrime2015} ont souhaités intégrer les contraintes présentes \boxes{}\cite{allombert:hal-00353628} pour permettre de contrôler l'interactivité et de l'inscrire dans la démarche de composition.
+Les chercheurs du \acrshort{scrime}\cite{Scrime2015} ont souhaité intégrer les contraintes présentes \boxes{}\cite{allombert:hal-00353628} pour permettre de contrôler l'interactivité et de l'inscrire dans la démarche de composition.
 
 Ce faisant, les utilisations ont mis en avant le besoin d'introduire des contraintes plus fines que les relations d'Allen. Ces nouvelles contraintes -- que nous appellerons relations temporelles (\acrshort{rt}) -- contraignent deux évènements entre eux par un intervalle de durée $[Val_{min}, Val_{max}]$ les séparant. Cet intervalle est lui-même inclus dans l'intervalle $[0,+\infty]$, et on en distinguera trois types :
 
@@ -130,31 +133,30 @@ La version 0.2 d'\iscore{}\footnote{\url{https://github.com/i-score/i-score/tree
 
 \schema{iscore02}{L'interface d'\iscore{} 0.2 : l'explorateur de contrôles \osc{} à gauche et la surface d'édition à droite. On peut voir une relation temporelle semi-rigide entre Box2 et Box3 et une relation rigide entre Box2 et Box4. La durée de la boite Box4 est une relation souple. Chaque relation non rigide entraîne le création d'un trigger point -- ou point de déclenchement --, une condition binaire qui permet par exemple écouter la valeur d'une variable. }
 
-Les relations temporelles induisent des contraintes qui sont gérées avec l'aide du module \csp{} utilisé sur \boxes{}
-solveur de contrainte \gecode{}, leurs rôle est de gérer la position des éléments du scénario, et notamment lors de déplacements générés par l'utilisateur. 
+Les relations temporelles induisent des contraintes qui sont gérées avec l'aide du module \csp{} utilisé sur \boxes{}, et modifiés pour s'adapter au nouvelle relations. Ce module gère la position des éléments du scénario, notamment lors de déplacements générés par l'utilisateur.
 
-%L'exécution des scénarios 
+Il y a plusieurs problèmes avec ce module, ses modifications successives n'ont pas été documentées et le code à été abandonné pour les versions supérieures car estimé trop coûteux à adapter une nouvelle fois.
+
+L'exécution des scénarios se fait grâce à une modelisation sur des reseaux de petri.
+
+Cette version propose un modèle qui mélange temps absolu, dans le sens ou une boite placé arbitrairement est joué a l'instant précis ou elle est posé (sauf si celle-ci possède un trigger, dans ce cas souple implicite est crée a partir du début du scénario), ce qui n'est pas le cas d'une boite contrainte par une relation.
+
+Autre défaut constaté par certains utilisateurs, est le fait que lors de l'exécution d'un scénario les boites restent fixes dans la zone d'édition, on à donc recours à des curseurs de temps internes a chaque boites qui sont très rapidement désynchronisé du curseur de temps principal.
 
 \subsection{\iscore{} 0.3}% (édition & execution)
 
 La dernière version d'\iscore{}, actuellement en développement\footnote{\url{https://github.com/OSSIA/i-score}} \iscore{}, est la version 0.3.
 
-Cette nouvelle version a plusieurs objectifs :
+Cette nouvelle version a plusieurs objectifs dont voici une liste d'exemples non exhaustifs mais impactant le rôle du module \csp{} :
 
-\begin{itemize}
-    \item améliorer les contrôles et l'intuitivité de l'interface ;
-    \item pouvoir inclure des scénarios dans les boites d'autres scénarios ;
-    \item intégrer les boucles\footnote{Une boucle est le fait de répéter une boite.} ;
-    \item donner plus d'importance aux relations temporelles ;
-    \item pouvoir programmer des scénario sur des FPGA\footnote{\emph{field-programmable gate array} ou \emph{Circuit logique programmable}, ce sont des circuit intégré construit à base de portes logiques. Ils ont l'avantage de présenter une fiabilité et une stabilité supérieure à un ordinateur personnel.} ;
-    \item lors de l'exécution :
-    \begin{itemize}
-        \item n'afficher qu'un seul curseur de temps ;
-        \item afficher les évènements passé à la position exacte à laquelle ceux-ci se sont déroulés.
-    \end{itemize}
-\end{itemize}
+On désire améliorer l'intuitivité de l'interface d'édition, cela passe notamment par des choix d'IHM auquel nous ne nous intéresserons pas, mais également par le fait de n'utiliser qu'un seul curseur de temps l'ors de l'exécution du scénario. Grâce à cela on peut suivre plus aisément la progression et l'on garde la trace exacte de ce qui à été joué précédemment. On veut également enlever l'ambiguité entre temps absolu et temps relatifs, tout les temps sont désormais relatifs : un élément n'a de sens que par la relation qu'il entretient avec un autre (nous verrons plus tard les tenant et aboutissants).
+Cela passe également par le feedback de l'application envers les utilisateurs concernant des propriétés de son scénario (alertes, repères, etc.).
 
-Pour l'instant, cette version ne présente qu'une interface d'édition et utilise le moteur de la version 0.2 pour exécuter des scénarios. Le moteur d'exécution d'\iscore{} 0.3 est développé par Jaime Arias, grâce à l'utilisation d'automates.
+On désire également pouvoir inclure des scénarios complets dans des boites d'autre scénarios en tant que processus que l'on nomme \emph{sous-scénarios}.
+
+Le moteur d'exécution présente des failles que nous expliciterons en section?????? on désire corriger ces failles est rendre l'exécution des scénarios plus fiable.
+
+Pour l'instant, cette version ne présente qu'une interface d'édition et utilise le moteur de la version 0.2 pour exécuter des scénarios. Le moteur d'exécution d'\iscore{} 0.3 est développé par Jaime Arias, grâce à l'utilisation d'automates temporisé avec pour objectif de rendre possible l'écriture de scénarios sur FPGA.
 Cette version n'intègre pas encore de solveur de contraintes et le positionnement des éléments est pour l'instant géré de façon empirique.
 
 \section{Le formalisme actuel}

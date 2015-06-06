@@ -1,48 +1,7 @@
 
 
-Définissons maintenant les rôles attendus pour le CSP solver :
-\begin{enumerate}
-    \item Assurer la faisabilité du scénario ;
-    \item Prédire les comportement à l'exécution :
-    \begin{enumerate}
-        \item Indiquer la propagation des contraintes (cf. figure \ref{figPropagation}) ;
-        \item Détecter les dépendances de souplesse (cf. figure \ref{figPropagation}) .
-    \end{enumerate}
-\end{enumerate}
 
-\begin{figure}[ht]
-    \centering
-    \illustrationKeepDim{propagation}
-    \caption{La contrainte \contrainte{3} est propagée sur la contrainte \contrainte{1} ; la durée de \contrainte{3} est en revanche déterminée par \contrainte{1} car cette dernière se déroulera forcément en premier. \label{figPropagation}}
-\end{figure}
-
-
-
-
-
-\begin{figure}[ht]
-    \centering
-    \illustrationKeepDim{incoherence1}
-    \caption{La date du Timenode 2 dépend d'un évènement futur. \label{figIncoherenceTemporelle}}
-\end{figure}
-
-\subsection{Indiquer la propagation des contraintes}
-
-Indiquer la propagation des contraintes sert à indiquer l'intervalle réel pendant lequel un timenode pourra être éxécuté.
-
-
-L'étude du \csp{} m'a amené à analyser d'autres aspects d'\iscore{} et de l'API \ossia{}, allant du formalisme de la composition interactive a l'étude du moteur d'exécution. Pour pouvoir assoir les bases du CSP, j'ai donc fait des proposition pour tenter d'apporter des réponses sur des éléments flou ou des situations problématiques.
-
-Chaque version d\iscore{} est l'occasion de retoucher le formalisme des relations temporelles et de la composition de scénario en général. La dernière version ne déroge pas à la règle
-
-
-
-
-
-
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -188,20 +147,6 @@ soit : la date de chaque \gls{timenode} -- \startNode~et \finalNode~exceptés --
 
 Pour la suite, explicitons ce qu'est une \gls{relationTemporelle} :
 
-Une \gls{relationTemporelle} \contrainte{1} lie un \gls{timenode} \timeNode{1} prédécesseur et un \gls{timenode} \timeNode{2} successeur par une durée nominale \dureeNominale{1}, une souplesse en amont \souplesseAvant{1} et une souplesse en aval \souplesseApres{1}
-\begin{itemize}
-    \item La durée nominale est définie telle que : $ \dureeNominale{1} \in \left [ O ... +\infty \right [ $
-    \item La souplesse en amont \souplesseAvant{1} est définie tel que : $ 0 \leq \souplesseAvant{1} $
-    \item La souplesse en aval \souplesseApres{1} est définie tel que : $ 0 \leq \souplesseApres{1} $
-\end{itemize}
-
-Pour simplifier certains calculs, on utilisera les valeurs de butée min et max :
-\begin{itemize}
-    \item La butée minimum calculée telle que : $ \buteeMin{1} = \dureeNominale{1} - \souplesseAvant{1} $
-    \item La butée maximum calculée telle que : $ \buteeMax{1} = \dureeNominale{1} + \souplesseApres{1} $
-\end{itemize}
-
-Ces intervalles sont montrés visuellement sur la figure \ref{figNotations}.
 
 \begin{figure}[ht]
     \centering
@@ -211,11 +156,6 @@ Ces intervalles sont montrés visuellement sur la figure \ref{figNotations}.
 
 Nous voulons que l'intervalle de déclenchement d'un \gls{timenode} dépende des contraintes qui le précèdent, nous avons donc la contrainte suivante : 
 
-\begin{gather*}
-    \forall \contrainte{}~reliant~\timeNode{1}~a~\timeNode{2}~:\\
-    \timeNode{1} + \buteeMin{1} \leq \timeNode{2}\\
-    \timeNode{2} \leq \timeNode{1} + \buteeMax{1}
-\end{gather*}
 
 \subsubsection{Assurer la faisabilité du scénario}
 

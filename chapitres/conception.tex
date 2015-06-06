@@ -1,1 +1,68 @@
 \chapter{Conception du module \csp{}}
+ Dans un premier temps, nous allons nous attacher à valider la consistance temporelle d'un scénario lors de l'édition.
+ \iscore{} 0.3 reste un champ d'expérimentation et beaucoup de réflexions ont été apportés sur le fonctionnement des scénarios interactifs ainsi que du comportement de l'interface, une trace de ces réflexions peut être vu en annexe \ref{annexeIncoherences} et \ref{annexeStartnode}.
+
+\section{Le modèle pour l'édition}
+Dans cette section nous allons définir un modèle de contraintes qui nous permettra de répondre à des problématiques liés à l'édition des scénarios et nous allons regarder comment exploiter celui-ci.
+
+
+La consistance d'un scénario est alors définie par l'énoncé suivant : un scénario est consistant s'il n'existe pas de cas ou des relations temporelles ne puissent pas être satisfaites, peut importe les conditions des évènements.
+%
+En effet au moment de l'édition, toute les relations temporelles sont actives. De même, l'état des conditions des évènements est considéré inconnu.
+\begin{apparte}
+    Outre le fait que certaines conditions ne soit connu que lors de l'exécution, il faut que le changement d'une condition n'altère pas la consistance temporelle du scénario. Pour cette raison même une \gls{reltemp} suivant une condition définie comme fausse est prise en compte.%piti schéma?
+\end{apparte}
+
+Tout d'abord, nous allons donc modifier légèrement le formalisme initial en y retirant les évènement et en connectant les \glspl{reltemp} directement aux timenodes (auxquels ils étaient reliés grâce à leurs évènements).
+
+On peut alors représenter un scénario par un graphe ou les sommet sont des timenodes et les arrêtes sont des relations temporelles.
+
+%TODO: schema graphe
+
+Une fois formalisé, voici les règles que l'on obtient :
+
+La \textbf{date} \timeNode{1} d'un \gls{timenode}, la valeur de temps à laquelle un \gls{timenode} est affiché (et éventuellement déclenché). L'ensemble des valeurs possibles de la date d'un \gls{timenode} représente son \textbf{intervale d'exécution}.
+
+Une \gls{relationTemporelle} \contrainte{1} lie un \gls{timenode} \timeNode{1} prédécesseur et un \gls{timenode} \timeNode{2} successeur par une butée minimum \buteeMin{1} et une butée maximum \buteeMax{1}.
+\begin{itemize}
+    \item La butée minimum \buteeMin{1} telle que : $ \buteeMin{1} \in \left [ O ... +\infty \right [ $
+    \item La butée maximum \buteeMax{1} telle que : $\buteeMax{1} \in \left [ O ... +\infty \right ]$ et $ \dureeNominale{1} \leq \buteeMax{1} $
+\end{itemize}
+
+Si un \gls{timenode} est attaché à une \gls{reltemp}, alors son intervalle d'exécution dépend des butee de celle ci, ainsi que de l'intervalle d'exécution de l'autre \gls{timenode} auquel est attaché la relation temporelle. En voici l'expression mathematique : 
+\begin{gather*}
+    \forall \contrainte{}~reliant~\timeNode{1}~a~\timeNode{2}~:\\
+    \timeNode{1} + \buteeMin{1} \leq \timeNode{2}\\
+    \timeNode{2} \leq \timeNode{1} + \buteeMax{1}
+\end{gather*}
+
+Il sagit maintenant de traduire ces règle sous forme de contraintes pour pouvoir alimenter un solveur.
+%
+C'est maintenant qu'apparaît l'avantage de la programmation par contrainte car sans le savoir, nous venons de décrire toutes les contraintes nécessaires pour alimenter le solveur.
+
+Pour résumer nous avons donc en entrée du solveur les dates des timenodes et les valeurs butées, ainsi que des systèmes d'inéquations pour les contraindre. Se pose alors la question du domaine des variable (comme vu en \autoref{section:fonctionnementSolveur}) utilise t'on un domaine réel ou entier?
+%
+Pour répondre à cette question il faut s'intéresser à l'exécution des scénarios, l'écoulement du temps découle de tics d'horloge ce qui fait apparaître une granularité\footnote{Nous ne nous intéresserons pas à la finesse de cette granularité.} temporelle, de ce fait nous faisons le choix de travailler avec des nombres entiers. 
+
+Une fois que le modèle est entré dans le solveur, il ne nous reste plus qu'a l'interroger.
+
+\subsection{Valider un scénario}
+Comment intérroger le solveur pour savoir si un scénario est consistant?
+
+Rappelez-vous : \emph{un scénario est consistant s'il n'existe pas de cas ou des relations temporelles ne puissent pas être satisfaites, peut importe les conditions des évènements.}. Les relations sont désormais traduites en contraintes, pour savoir si un scénario est consistant on demande au solveur d'attribuer des valeur aux dates des timenodes. Si le solveur trouve au moins une solution au problème cela veut dire qu'il existe un intervale d'exécution non nul pour chaque timenode, par conséquent chaque évènement : alors notre scénario est consistant.
+
+\subsection{Obtenir les intervalles d'exécution réels}
+Étant donné un \rt{1}{1}{2}, quel est l'intervalle d'exécution réel de \tnode{2} par rapport à \tnode{1}?
+
+Soit mathématiquement parlant : 
+Quelle sont les valeurs maximum et minimum que peut prendre $\tnode{2} - \tnode{1}$
+
+\begin{apparte}
+S'y on imagine le scénario comme un système mécanique on peut répondre à cette question en essayant d'ecarter \tnode{1} de \tnode{2} jusqu'à blocage (ou pas si infini) et pareillement en essayant de les rapprocher.
+\end{apparte}
+
+Il suffit alors de déclarer une variable \intReel{} po et une contrainte $\intReel{} = \tnode{2} - \tnode{1}$. On demande alors la valeur maximale et minimal de \intReel{} pour obtenir les butées \intReelMin{1}{2} et \intReelMax{1}{2}.
+
+Il est par ailleurs possible de demander de la même manière les \intReel{} de deux \glspl{timenode} n'étant pas connecté directement par une \gls{reltemp}.
+
+\section{Le modèle pour l'exécution}
